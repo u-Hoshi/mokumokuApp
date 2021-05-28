@@ -1,26 +1,28 @@
-import { ChangeEvent, useState, VFC } from 'react'
-import { Col, DatePicker, Form, Radio, RadioChangeEvent, Row } from 'antd'
+import { useState, VFC } from 'react'
+import { DatePicker, Form, Radio, RadioChangeEvent } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
-import { Dayjs } from 'dayjs'
-import dayjsGenerateConfig from 'rc-picker/lib/generate/dayjs'
-import generatePicker from 'antd/es/date-picker/generatePicker'
-import moment from 'moment'
+// import moment from 'moment'
+import { db } from '../../firebase/index'
 
 const { RangePicker } = DatePicker
-
-//
-
-//
 
 const RoomDetail: VFC = () => {
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
-  const [typeMeet, setTypeMeet] = useState({})
+  const [meetType, setMeetType] = useState({})
   const [message, setMessage] = useState<string>('')
 
-  const onFinish = () => alert(message)
+  // ルームの追加処理
+  const onFinish = () => {
+    db.collection('Group1').add({
+      starttime: startTime,
+      endtime: endTime,
+      meettype: meetType,
+      message: message,
+    })
+  }
 
   // TODO:anyを取り除く
   const onChangeTime = (dates: any, dateStrings: [string, string]) => {
@@ -33,7 +35,7 @@ const RoomDetail: VFC = () => {
 
   const onChangeType = (e: RadioChangeEvent) => {
     // TODO target.valueで渡すかオブジェクトで渡すか検討
-    setTypeMeet(e.target.value)
+    setMeetType(e.target.value)
   }
 
   return (
