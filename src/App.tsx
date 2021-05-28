@@ -1,8 +1,6 @@
-import React from 'react'
-// import React from 'react-dom/node_modules/@types/react'
+import React, { VFC } from 'react'
 
-const App = () => {
-  console.log('hoge')
+const App: VFC = () => {
   return (
     <>
       <p>hoge</p>
