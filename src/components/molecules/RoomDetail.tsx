@@ -9,8 +9,6 @@ import { db } from '../../firebase/index'
 const { RangePicker } = DatePicker
 
 const RoomDetail: VFC = () => {
-  // const [startTime, setStartTime] = useState('')
-  // const [endTime, setEndTime] = useState('')
   // 第一引数のmomentの形でデータをセット
   const [startTimeDT, setStartTimeDT] = useState({})
   const [endTimeDT, setEndTimeDT] = useState({})
@@ -26,8 +24,6 @@ const RoomDetail: VFC = () => {
   // ルームの追加処理
   const onFinish = () => {
     db.collection('Group1').add({
-      // starttime: startTime,
-      // endtime: endTime,
       starttimeDT: startTimeDT,
       endtimeDT: endTimeDT,
       meettype: meetType,
@@ -42,14 +38,12 @@ const RoomDetail: VFC = () => {
     // TODO datesかdateStringsで渡すか検討
     setStartTimeDT(dates[0].toArray())
     setEndTimeDT(dates[1].toArray())
-    // setStartTime(dateStrings[0])
-    // setEndTime(dateStrings[1])
     console.log('Selected Time: ', dates[0].toArray())
     console.log('Formatted Selected Time: ', endTimeDT)
   }
 
   const onChangeType = (e: RadioChangeEvent) => {
-    // TODO target.valueで渡すかオブジェクトで渡すか検討
+    //momentという形で渡す
     setMeetType(e.target.value)
   }
 
@@ -61,8 +55,8 @@ const RoomDetail: VFC = () => {
         </Form.Item>
         <Form.Item name="radio-group" label="雰囲気">
           <Radio.Group onChange={onChangeType}>
-            <Radio value={'quiet'}>もくもく</Radio>
-            <Radio value={'busy'}>わいわい</Radio>
+            <Radio value={'もくもく'}>もくもく</Radio>
+            <Radio value={'わいわい'}>わいわい</Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item>

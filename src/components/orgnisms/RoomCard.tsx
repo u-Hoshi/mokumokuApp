@@ -13,17 +13,6 @@ type room = {
 
 const RoomCard: VFC<room> = (props) => {
   const { endTimeDT, meettype, message, startTimeDT } = props
-  // const [roomCard, setRoomCard] = useState([{ starttime: '', endtime: '' ,meettype'',message''}])
-  useEffect(() => {
-    db.collection('Group1').onSnapshot((snapshot) => {
-      const rooms = snapshot.docs.map((doc) => {
-        return {
-          ...doc.data(),
-        }
-      })
-      console.log(rooms)
-    })
-  }, [])
   return (
     <>
       <Col span={8}>

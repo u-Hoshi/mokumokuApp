@@ -14,6 +14,7 @@ const RoomTable: VFC = () => {
 
   const [allrooms, setRooms] = useState<any>([])
 
+  // 全ルームの情報を取得取得
   useEffect(() => {
     db.collection('Group1').onSnapshot((snapshot) => {
       const rooms = snapshot.docs.map((doc) => {
@@ -43,7 +44,6 @@ const RoomTable: VFC = () => {
           <p>...loading</p>
         )}
       </Row>
-      ,
     </>
   )
 }
