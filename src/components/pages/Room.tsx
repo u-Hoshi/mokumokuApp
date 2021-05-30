@@ -1,14 +1,16 @@
 import { Col, Row } from 'antd'
 import RoomDetail from 'components/molecules/RoomDetail'
+import RoomTable from 'components/themplates/RoomTable'
 import { VFC } from 'react'
-
-const DemoBox = (props: any) => <p className={`height-${props.value}`}>{props.children}</p>
 
 const Room: VFC = () => {
   return (
     <>
-      <Row align="bottom" style={{ alignItems: 'bottom' }} justify="end" gutter={10}>
-        <Col>
+      <Row>
+        <Col span={17}>
+          <RoomTable />
+        </Col>
+        <Col span={6} offset={1}>
           <RoomDetail />
         </Col>
       </Row>
