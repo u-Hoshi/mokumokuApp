@@ -9,8 +9,11 @@ import { db } from '../../firebase/index'
 const { RangePicker } = DatePicker
 
 const RoomDetail: VFC = () => {
-  const [startTime, setStartTime] = useState('')
-  const [endTime, setEndTime] = useState('')
+  // const [startTime, setStartTime] = useState('')
+  // const [endTime, setEndTime] = useState('')
+  // 第一引数のmomentの形でデータをセット
+  const [startTimeDT, setStartTimeDT] = useState({})
+  const [endTimeDT, setEndTimeDT] = useState({})
   const [meetType, setMeetType] = useState({})
   const [message, setMessage] = useState<string>('')
   const [form] = Form.useForm()
@@ -23,8 +26,10 @@ const RoomDetail: VFC = () => {
   // ルームの追加処理
   const onFinish = () => {
     db.collection('Group1').add({
-      starttime: startTime,
-      endtime: endTime,
+      // starttime: startTime,
+      // endtime: endTime,
+      starttimeDT: startTimeDT,
+      endtimeDT: endTimeDT,
       meettype: meetType,
       message: message,
     })
@@ -35,10 +40,12 @@ const RoomDetail: VFC = () => {
   // TODO:anyを取り除く
   const onChangeTime = (dates: any, dateStrings: [string, string]) => {
     // TODO datesかdateStringsで渡すか検討
-    setStartTime(dateStrings[0])
-    setEndTime(dateStrings[1])
-    console.log('Selected Time: ', dates)
-    console.log('Formatted Selected Time: ', dateStrings)
+    setStartTimeDT(dates[0].toArray())
+    setEndTimeDT(dates[1].toArray())
+    // setStartTime(dateStrings[0])
+    // setEndTime(dateStrings[1])
+    console.log('Selected Time: ', dates[0].toArray())
+    console.log('Formatted Selected Time: ', endTimeDT)
   }
 
   const onChangeType = (e: RadioChangeEvent) => {
