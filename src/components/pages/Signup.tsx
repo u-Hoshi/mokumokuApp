@@ -1,7 +1,7 @@
 import { VFC } from 'react'
 
 const Signup: VFC = () => {
-  return <></>
+  return <>signup</>
 }
 
 export default Signup

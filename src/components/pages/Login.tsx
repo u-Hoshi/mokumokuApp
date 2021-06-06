@@ -1,7 +1,7 @@
 import { VFC } from 'react'
 
 const Login: VFC = () => {
-  return <></>
+  return <>login</>
 }
 
 export default Login
