@@ -1,14 +1,14 @@
 import { Row, Anchor } from 'antd'
-
 import { Typography } from 'antd'
-
 const { Title, Text } = Typography
-
 import { VFC } from 'react'
+import { useHistory } from 'react-router'
 
 const Header: VFC = () => {
+  const history = useHistory()
+
   const onClickUserSetting = () => {
-    console.log('hoge')
+    history.push('/usersetting')
   }
 
   return (
