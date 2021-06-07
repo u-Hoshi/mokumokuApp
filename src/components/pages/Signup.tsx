@@ -1,5 +1,6 @@
 import React, { useState, VFC } from 'react'
 import { auth } from '../../firebase/index'
+import { Form, Input, Button } from 'antd'
 
 const Signup: VFC = () => {
   const [email, setEmail] = useState('')
@@ -10,7 +11,7 @@ const Signup: VFC = () => {
       .createUserWithEmailAndPassword(email, password)
       // 後ほどユーザ名を設定
       .catch(() => {
-        console.log('error:')
+        console.log(email)
         alert('サインアップ失敗です')
       })
   }
@@ -19,9 +20,19 @@ const Signup: VFC = () => {
     <>
       signup
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name</label>
+      <Form onFinish={handleSubmit}>
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <Input
+            onChange={(e) => {
+              setUserName(e.target.value)
+            }}
+          />
+        </Form.Item>
+        {/* <label htmlFor="name">Name</label>
           <input
             name="name"
             type="name"
@@ -30,10 +41,8 @@ const Signup: VFC = () => {
             onChange={(e) => {
               setUserName(e.target.value)
             }}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">E-mail</label>
+          /> */}
+        {/* <label htmlFor="email">E-mail</label>
           <input
             name="email"
             type="email"
@@ -43,10 +52,15 @@ const Signup: VFC = () => {
               setEmail(e.target.value)
               console.log(e.target.value)
             }}
+          /> */}
+        <Form.Item label="email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
+          <Input
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
+        </Form.Item>
+        {/* <label htmlFor="password">Password</label>
           <input
             name="password"
             type="password"
@@ -55,10 +69,20 @@ const Signup: VFC = () => {
             onChange={(e) => {
               setPassword(e.target.value)
             }}
+          /> */}
+        <Form.Item
+          label="password"
+          name="password"
+          rules={[{ required: true, message: 'Please input your password!' }]}
+        >
+          <Input
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
           />
-        </div>
+        </Form.Item>
         <button type="submit">Sign Up</button>
-      </form>
+      </Form>
     </>
   )
 }
