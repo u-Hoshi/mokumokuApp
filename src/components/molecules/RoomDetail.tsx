@@ -35,7 +35,7 @@ const RoomDetail: VFC = () => {
 
   // TODO:anyを取り除く
   const onChangeTime = (dates: any, dateStrings: [string, string]) => {
-    // TODO datesかdateStringsで渡すか検討
+    // momentの形で取得できるdatesで受け取ることにする
     setStartTimeDT(dates[0].toArray())
     setEndTimeDT(dates[1].toArray())
     console.log('Selected Time: ', dates[0].toArray())

@@ -11,7 +11,7 @@ const RoomTable: VFC = () => {
     message: string
     starttimeDT: []
   }
-
+  // TODO anyを取り除く
   const [allrooms, setRooms] = useState<any>([])
 
   // 全ルームの情報を取得取得
