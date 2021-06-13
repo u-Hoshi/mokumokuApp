@@ -7,7 +7,7 @@ const { Meta } = Card
 type room = {
   endTimeDT: number[]
   meettype: string
-  message: string
+  message?: string
   startTimeDT: number[]
 }
 

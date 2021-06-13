@@ -1,6 +1,6 @@
 # もくもく会アプリ
 
-ステージング：https://app.netlify.com/sites/staging-mekumoku/overview
+ステージング：https://staging-mekumoku.netlify.app/
 
 本番：未設定
 

@@ -50,10 +50,10 @@ const RoomDetail: VFC = () => {
   return (
     <>
       <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
-        <Form.Item name="date-picker" label="DatePicker">
+        <Form.Item name="date-picker" label="DatePicker" rules={[{ required: true, message: 'Please input time!' }]}>
           <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} />
         </Form.Item>
-        <Form.Item name="radio-group" label="雰囲気">
+        <Form.Item name="radio-group" label="雰囲気" rules={[{ required: true, message: 'Please input type!' }]}>
           <Radio.Group onChange={onChangeType}>
             <Radio value={'もくもく'}>もくもく</Radio>
             <Radio value={'わいわい'}>わいわい</Radio>
@@ -62,7 +62,7 @@ const RoomDetail: VFC = () => {
         <Form.Item>
           <TextArea rows={4} placeholder="今日やること" value={message} onChange={(e) => setMessage(e.target.value)} />
         </Form.Item>
-        <PrimaryButton />
+        <PrimaryButton>会を追加する</PrimaryButton>
       </Form>
     </>
   )
