@@ -62,7 +62,7 @@ const RoomDetail: VFC = () => {
         <Form.Item>
           <TextArea rows={4} placeholder="今日やること" value={message} onChange={(e) => setMessage(e.target.value)} />
         </Form.Item>
-        <PrimaryButton>会を追加する</PrimaryButton>
+        <PrimaryButton style={{ marginLeft: '8' }}>会を追加する</PrimaryButton>
       </Form>
     </>
   )

@@ -1,7 +1,11 @@
 import { useState, VFC } from 'react'
 import { useHistory } from 'react-router'
 import { auth } from '../../firebase/index'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Row, Typography, Col } from 'antd'
+import PrimaryButton from 'components/atoms/PrimaryButton'
+import LoginHeader from 'components/orgnisms/LoginHeader'
+
+const { Title } = Typography
 
 const Login: VFC = () => {
   const [email, setEmail] = useState('')
@@ -22,28 +26,46 @@ const Login: VFC = () => {
 
   return (
     <>
-      <h1>Login</h1>
-      <Form onFinish={handleSubmit}>
-        <Form.Item label="email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-          <Input
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          label="password"
-          name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-          />
-        </Form.Item>
-        <button type="submit">Sign Up</button>
-      </Form>
+      {/* ログインページの一部として使うのでorgnismsから呼び出す */}
+      <LoginHeader />
+      <Title level={2} style={{ textAlign: 'center' }}>
+        ログイン
+      </Title>
+      <Row justify="center">
+        <Col span={10}>
+          <Form onFinish={handleSubmit} style={{ textAlign: 'center' }}>
+            <Form.Item
+              label="email"
+              name="email"
+              rules={[{ required: true, message: 'Please input your email!' }]}
+              style={{ flexDirection: 'column' }}
+              labelAlign={'left'}
+            >
+              <Input
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              label="password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' }]}
+              style={{ flexDirection: 'column' }}
+              labelAlign={'left'}
+            >
+              <Input
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                }}
+              />
+            </Form.Item>
+            {/* <button type="submit">Sign Up</button> */}
+
+            <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
+          </Form>
+        </Col>
+      </Row>
     </>
   )
 }
