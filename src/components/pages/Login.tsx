@@ -60,8 +60,6 @@ const Login: VFC = () => {
                 }}
               />
             </Form.Item>
-            {/* <button type="submit">Sign Up</button> */}
-
             <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
           </Form>
         </Col>
