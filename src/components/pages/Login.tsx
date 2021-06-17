@@ -26,7 +26,7 @@ const Login: VFC = () => {
 
   return (
     <>
-      {/* ログインページの一部として使うのでorgnismsから呼び出す */}
+      {/* ログイン・サインアップ共通のヘッダーをorgnismsから呼び出す */}
       <LoginHeader />
       <Title level={2} style={{ textAlign: 'center' }}>
         ログイン
