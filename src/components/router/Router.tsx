@@ -9,18 +9,18 @@ import { Route, Switch } from 'react-router'
 export const Router: VFC = () => {
   return (
     <Switch>
+      <Route path="/login">
+        <Login />
+      </Route>
+      <Route path="/signup">
+        <Signup />
+      </Route>
       <LoginUserProvider>
         <Route exact path="/">
           <Room />
         </Route>
         <Route path="/usersetting">
           <UserSetting />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/signup">
-          <Signup />
         </Route>
       </LoginUserProvider>
     </Switch>

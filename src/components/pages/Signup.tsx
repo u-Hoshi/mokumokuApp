@@ -1,10 +1,11 @@
 import { useState, VFC } from 'react'
-import { auth } from '../../firebase/index'
+import { auth, db } from '../../firebase/index'
 import { Form, Input, Button, Row, Col } from 'antd'
 import { useHistory } from 'react-router'
 import LoginHeader from 'components/orgnisms/LoginHeader'
 import Title from 'antd/lib/typography/Title'
 import PrimaryButton from 'components/atoms/PrimaryButton'
+import { firebaseConfig } from '../../firebase/config'
 
 const Signup: VFC = () => {
   const [email, setEmail] = useState('')
@@ -14,8 +15,21 @@ const Signup: VFC = () => {
   const handleSubmit = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((result) => {
+        const user = result.user
         history.push('/')
+        if (user) {
+          const uid = user.uid
+
+          const userInfo = {
+            uid: uid,
+            password: password,
+            dispalyname: userName,
+            email: email,
+          }
+
+          db.collection('Users').doc(uid).set(userInfo)
+        }
       })
       // 後ほどユーザ名を設定
       .catch((err) => {
