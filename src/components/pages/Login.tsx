@@ -1,9 +1,10 @@
-import { useState, VFC } from 'react'
+import { useContext, useState, VFC } from 'react'
 import { useHistory } from 'react-router'
-import { auth } from '../../firebase/index'
+import { auth, db } from '../../firebase/index'
 import { Form, Input, Button, Row, Typography, Col } from 'antd'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import LoginHeader from 'components/orgnisms/LoginHeader'
+import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const { Title } = Typography
 
@@ -11,6 +12,7 @@ const Login: VFC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const history = useHistory()
+  const { loginUser, setLoginUser } = useContext(LoginUserContext)
   const handleSubmit = () => {
     auth
       .signInWithEmailAndPassword(email, password)
