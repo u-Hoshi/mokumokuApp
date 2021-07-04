@@ -1,19 +1,21 @@
-import { useState, VFC } from 'react'
-import { auth, db } from '../../firebase/index'
-import { Form, Input, Button, Row, Col } from 'antd'
+import { useState, VFC, useCallback } from 'react'
+import { auth, db, storage } from '../../firebase/index'
+import { Form, Input, Row, Col, Upload, Modal } from 'antd'
+import { UploadFile } from 'antd/lib/upload/interface'
 import { useHistory } from 'react-router'
 import LoginHeader from 'components/orgnisms/LoginHeader'
 import Title from 'antd/lib/typography/Title'
 import PrimaryButton from 'components/atoms/PrimaryButton'
-import { firebaseConfig } from '../../firebase/config'
+import ImgCrop from 'antd-img-crop'
 
 const Signup: VFC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [userName, setUserName] = useState('')
+  console.log(email)
   const history = useHistory()
-  const handleSubmit = () => {
-    auth
+  const handleSubmit = useCallback(async () => {
+    await auth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         const user = result.user
@@ -29,13 +31,68 @@ const Signup: VFC = () => {
           }
 
           db.collection('Users').doc(uid).set(userInfo)
+          // アイコンの保存
+          // useCallback(async () => {
+          const imageName = fileList[0]
+          // TODO ts-ignoreを取り除く
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          storage.ref(`/images/${imageName.name}`).put(imageName.originFileObj)
+
+          storage
+            .ref(`/images/${imageName.name}`)
+            .getDownloadURL()
+            .then((fireBaseUrl) => {
+              db.collection('Users').doc(uid).set(
+                {
+                  photoURL: fireBaseUrl,
+                },
+                { merge: true }
+              )
+              // message.success('保存しました')
+            })
+          // }, [user])
         }
       })
-      // 後ほどユーザ名を設定
       .catch((err) => {
         console.log('err' + err)
-        alert('サインアップ失敗です')
+        console.log('サインアップ失敗です')
       })
+  }, [])
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // TODO: size, type ともに仮データの数値を設定したが明らかに最適な初期値ではない。そのうち調べる。
+      size: 213022,
+      type: 'image/png',
+    },
+  ])
+  const onFileChange = useCallback(({ fileList: newFileList }) => {
+    setFileList(newFileList)
+  }, [])
+  console.log(fileList)
+
+  const previewImg = async (file: any) => {
+    let src = file.url
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj)
+        reader.onload = () => resolve(reader.result)
+      })
+    }
+
+    const image = new Image()
+    image.src = src
+    const imgWindow = window.open(src)
+    if (imgWindow !== null) {
+      imgWindow.document.write(image.outerHTML)
+    }
   }
 
   return (
@@ -87,6 +144,17 @@ const Signup: VFC = () => {
                 }}
               />
             </Form.Item>
+            <ImgCrop rotate>
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={onFileChange}
+                onPreview={previewImg}
+              >
+                {fileList.length < 1 && 'Upload'}
+              </Upload>
+            </ImgCrop>
             <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
           </Form>
         </Col>
