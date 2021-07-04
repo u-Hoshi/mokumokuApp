@@ -11,6 +11,7 @@
     "@types/node": "^12.0.0",
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.16.0",
+    "antd-img-crop": "^3.14.2",
     "dayjs": "^1.10.5",
     "firebase": "^8.6.3",
     "moment": "^2.29.1",
