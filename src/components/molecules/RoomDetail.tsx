@@ -8,7 +8,9 @@ import { db } from '../../firebase/index'
 
 const { RangePicker } = DatePicker
 
-const RoomDetail: VFC = () => {
+const RoomDetail: VFC<any> = (props) => {
+  const { user } = props
+  console.log(user)
   // 第一引数のmomentの形でデータをセット
   const [startTimeDT, setStartTimeDT] = useState({})
   const [endTimeDT, setEndTimeDT] = useState({})
@@ -28,6 +30,7 @@ const RoomDetail: VFC = () => {
       endtimeDT: endTimeDT,
       meettype: meetType,
       message: message,
+      Author: user.displayname,
     })
     onReset()
     setMessage('')

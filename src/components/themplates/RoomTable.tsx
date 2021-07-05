@@ -6,6 +6,8 @@ import { Row } from 'antd'
 
 const RoomTable: VFC = () => {
   type room = {
+    id: string
+    Author: string
     endtimeDT: []
     meettype: string
     message: string
@@ -19,6 +21,7 @@ const RoomTable: VFC = () => {
     db.collection('Group1').onSnapshot((snapshot) => {
       const rooms = snapshot.docs.map((doc) => {
         return {
+          id: doc.id,
           ...doc.data(),
         }
       })
@@ -34,6 +37,8 @@ const RoomTable: VFC = () => {
         {allrooms ? (
           allrooms.map((room: room) => (
             <RoomCard
+              key={room.id}
+              Author={room.Author}
               startTimeDT={room.starttimeDT}
               endTimeDT={room.endtimeDT}
               meettype={room.meettype}

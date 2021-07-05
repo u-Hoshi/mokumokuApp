@@ -29,30 +29,12 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
               setLoginUser({
                 uid: uid,
                 password: data?.password,
-                username: data?.username,
+                displayname: data?.displayname,
+                imgurl: data?.photoURL,
               })
             })
-          // return user
         }
         fetchUser(uid)
-        //
-        // console.log(loginUser)
-        // console.log(uid)
-        // db.collection('Users')
-        //   .doc(uid)
-        //   .get()
-        //   .then((snapshot) => {
-        //     const data = snapshot.data()
-        //     console.log(data)
-        //     if (data) {
-        //       setLoginUser({
-        //         uid: uid,
-        //         password: data?.password,
-        //         username: data?.username,
-        //       })
-        //     }
-        //   })
-        //
         console.log(loginUser)
       } else {
         alert('ログインして下さい！')
