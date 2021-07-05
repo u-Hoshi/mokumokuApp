@@ -5,6 +5,7 @@ import { EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
 const { Meta } = Card
 
 type room = {
+  Author: string
   endTimeDT: number[]
   meettype: string
   message?: string
@@ -12,7 +13,7 @@ type room = {
 }
 
 const RoomCard: VFC<room> = (props) => {
-  const { endTimeDT, meettype, message, startTimeDT } = props
+  const { Author, endTimeDT, meettype, message, startTimeDT } = props
   return (
     <>
       <Col span={8}>
@@ -24,7 +25,7 @@ const RoomCard: VFC<room> = (props) => {
           <Meta
             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
             title="もくもく会"
-            description="主催者:hoge"
+            description={Author}
           />
           {console.log(endTimeDT[1])}
           <h3>{`${startTimeDT[1] + 1}月${startTimeDT[2]}日${startTimeDT[3]}時${startTimeDT[4]}分から`}</h3>

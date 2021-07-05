@@ -9,9 +9,10 @@ import PrimaryButton from 'components/atoms/PrimaryButton'
 import ImgCrop from 'antd-img-crop'
 
 const Signup: VFC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [userName, setUserName] = useState<string>('')
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([])
   console.log(email)
   const history = useHistory()
   const handleSubmit = useCallback(async () => {
@@ -26,7 +27,7 @@ const Signup: VFC = () => {
           const userInfo = {
             uid: uid,
             password: password,
-            dispalyname: userName,
+            displayname: userName,
             email: email,
           }
 
@@ -55,23 +56,15 @@ const Signup: VFC = () => {
         }
       })
       .catch((err) => {
+        if (err.toString() == '[firebase_auth/invalid-email] The email address is badly formatted.') {
+          return 'error:email'
+        }
         console.log('err' + err)
         console.log('サインアップ失敗です')
       })
-  }, [])
+  }, [email, password, userName, fileList])
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      // TODO: size, type ともに仮データの数値を設定したが明らかに最適な初期値ではない。そのうち調べる。
-      size: 213022,
-      type: 'image/png',
-    },
-  ])
   const onFileChange = useCallback(({ fileList: newFileList }) => {
     setFileList(newFileList)
   }, [])
@@ -121,7 +114,13 @@ const Signup: VFC = () => {
             <Form.Item
               label="email"
               name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                { required: true, message: 'Please input your email!' },
+              ]}
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
@@ -144,17 +143,19 @@ const Signup: VFC = () => {
                 }}
               />
             </Form.Item>
-            <ImgCrop rotate>
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={onFileChange}
-                onPreview={previewImg}
-              >
-                {fileList.length < 1 && 'Upload'}
-              </Upload>
-            </ImgCrop>
+            <Form.Item label="icon" name="icon" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+              <ImgCrop rotate>
+                <Upload
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onFileChange}
+                  onPreview={previewImg}
+                >
+                  {fileList.length < 1 && 'Upload'}
+                </Upload>
+              </ImgCrop>
+            </Form.Item>
             <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
           </Form>
         </Col>
