@@ -31,6 +31,7 @@ const RoomDetail: VFC<any> = (props) => {
       meettype: meetType,
       message: message,
       Author: user.displayname,
+      AuthorId: user.uid,
     })
     onReset()
     setMessage('')

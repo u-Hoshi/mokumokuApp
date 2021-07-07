@@ -8,6 +8,7 @@ const RoomTable: VFC = () => {
   type room = {
     id: string
     Author: string
+    AuthorId: string
     endtimeDT: []
     meettype: string
     message: string
@@ -39,6 +40,7 @@ const RoomTable: VFC = () => {
             <RoomCard
               key={room.id}
               Author={room.Author}
+              AuthorId={room.AuthorId}
               startTimeDT={room.starttimeDT}
               endTimeDT={room.endtimeDT}
               meettype={room.meettype}
