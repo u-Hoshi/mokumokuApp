@@ -10,7 +10,6 @@ const { RangePicker } = DatePicker
 
 const RoomDetail: VFC<any> = (props) => {
   const { user } = props
-  console.log(user)
   // 第一引数のmomentの形でデータをセット
   const [startTimeDT, setStartTimeDT] = useState({})
   const [endTimeDT, setEndTimeDT] = useState({})
@@ -31,6 +30,7 @@ const RoomDetail: VFC<any> = (props) => {
       meettype: meetType,
       message: message,
       Author: user.displayname,
+      AuthorId: user.uid,
     })
     onReset()
     setMessage('')

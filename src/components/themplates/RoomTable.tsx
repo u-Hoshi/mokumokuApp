@@ -7,7 +7,7 @@ import { Row } from 'antd'
 const RoomTable: VFC = () => {
   type room = {
     id: string
-    Author: string
+    AuthorId: string
     endtimeDT: []
     meettype: string
     message: string
@@ -32,13 +32,12 @@ const RoomTable: VFC = () => {
   }, [])
   return (
     <>
-      {/* <RoomCard /> */}
       <Row gutter={[8, 40]}>
         {allrooms ? (
           allrooms.map((room: room) => (
             <RoomCard
               key={room.id}
-              Author={room.Author}
+              AuthorId={room.AuthorId}
               startTimeDT={room.starttimeDT}
               endTimeDT={room.endtimeDT}
               meettype={room.meettype}

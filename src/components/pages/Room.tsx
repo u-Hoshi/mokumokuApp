@@ -8,7 +8,6 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const Room: VFC = () => {
   const { loginUser, setLoginUser } = useContext(LoginUserContext)
-  console.log(loginUser)
   return (
     <>
       <HeaderLayout />
