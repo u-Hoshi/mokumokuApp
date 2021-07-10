@@ -1,7 +1,7 @@
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
 import { Skeleton, Card, Avatar, Row, Col } from 'antd'
-import { EllipsisOutlined, SettingOutlined } from '@ant-design/icons'
+import { PlusOutlined, SettingOutlined } from '@ant-design/icons'
 const { Meta } = Card
 
 type room = {
@@ -36,7 +36,7 @@ const RoomCard: VFC<room> = (props) => {
       <Col span={8}>
         <Card
           // style={{ width: 300, marginTop: 16 }}
-          actions={[<SettingOutlined key="setting" />, <EllipsisOutlined key="ellipsis" />]}
+          actions={[<SettingOutlined key="setting" />, <PlusOutlined key="attendance" />]}
         >
           <Meta avatar={<Avatar src={authorIcon} />} title="もくもく会" description={authorName} />
           <h3>{`${startTimeDT[1] + 1}月${startTimeDT[2]}日${startTimeDT[3]}時${startTimeDT[4]}分から`}</h3>
