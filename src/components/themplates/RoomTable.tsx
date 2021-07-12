@@ -42,6 +42,7 @@ const RoomTable: VFC = () => {
               endTimeDT={room.endtimeDT}
               meettype={room.meettype}
               message={room.message}
+              roomId={room.id}
             />
           ))
         ) : (

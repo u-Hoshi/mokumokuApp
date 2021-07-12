@@ -7,6 +7,7 @@ import { VFC, useContext } from 'react'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const Room: VFC = () => {
+  // TODO ↓をRoomDetailの方に移植する
   const { loginUser, setLoginUser } = useContext(LoginUserContext)
   return (
     <>
