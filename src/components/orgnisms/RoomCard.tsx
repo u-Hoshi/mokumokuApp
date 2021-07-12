@@ -1,6 +1,6 @@
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
-import { Skeleton, Card, Avatar, Row, Col } from 'antd'
+import { Skeleton, Card, Avatar, Tooltip, Col } from 'antd'
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons'
 const { Meta } = Card
 
@@ -43,6 +43,20 @@ const RoomCard: VFC<room> = (props) => {
           <h3>{`${endTimeDT[1] + 1}月${endTimeDT[2]}日${endTimeDT[3]}時${endTimeDT[4]}分まで`}</h3>
           <h4>{meettype}</h4>
           <h4>{message}</h4>
+          <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+            <Avatar src={authorIcon} />
+            <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
+            <Tooltip title="Ant User" placement="top">
+              <Avatar
+                style={{ backgroundColor: '#87d068' }}
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+              />
+            </Tooltip>
+            <Avatar
+              style={{ backgroundColor: '#1890ff' }}
+              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            />
+          </Avatar.Group>
         </Card>
       </Col>
     </>
