@@ -74,7 +74,12 @@ const RoomCard: VFC<room> = (props) => {
         <Card
           // style={{ width: 300, marginTop: 16 }}
           actions={[
-            <SettingOutlined key="setting" />,
+            <SettingOutlined
+              key="setting"
+              onClick={() => {
+                alert('まだ未実装です')
+              }}
+            />,
             // TODO 申し込み済みの時は違うアイコンを表示させ、参加取り消しができるようにする
             <PlusOutlined key="attendance" onClick={() => joinMeeting()} />,
           ]}
