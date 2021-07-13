@@ -1,10 +1,12 @@
 import { useState, VFC } from 'react'
-import { DatePicker, Form, Input, Radio, RadioChangeEvent } from 'antd'
+import { DatePicker, Form, message, Radio, RadioChangeEvent } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
 // import moment from 'moment'
 import { db } from '../../firebase/index'
+
+const alert = message
 
 const { RangePicker } = DatePicker
 
@@ -24,16 +26,22 @@ const RoomDetail: VFC<any> = (props) => {
 
   // ルームの追加処理
   const onFinish = () => {
-    db.collection('Group1').add({
-      starttimeDT: startTimeDT,
-      endtimeDT: endTimeDT,
-      meettype: meetType,
-      message: message,
-      Author: user.displayname,
-      AuthorId: user.uid,
-    })
-    onReset()
-    setMessage('')
+    try {
+      db.collection('Group1').add({
+        starttimeDT: startTimeDT,
+        endtimeDT: endTimeDT,
+        meettype: meetType,
+        message: message,
+        Author: user.displayname,
+        AuthorId: user.uid,
+      })
+      onReset()
+      setMessage('')
+      alert.success('ルーム追加成功')
+    } catch (err) {
+      alert.error('ルーム追加失敗')
+      console.log(err)
+    }
   }
 
   // TODO:anyを取り除く

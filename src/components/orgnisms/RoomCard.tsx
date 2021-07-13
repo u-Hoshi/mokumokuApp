@@ -87,7 +87,7 @@ const RoomCard: VFC<room> = (props) => {
           <Row>
             <Col offset={18}>
               <p>参加者</p>
-              <Avatar.Group maxCount={2} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+              <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                 <Avatar src={authorIcon} />
                 {allGuests ? (
                   allGuests.map((guest: guest) => <Avatar src={guest.guestImg} key={guest.guestId} />)
