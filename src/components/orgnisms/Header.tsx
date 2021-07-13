@@ -30,7 +30,7 @@ const Header: VFC = () => {
         {/* </Col> */}
         {/* <Col offset={23}> */}
         <Button type="link" onClick={() => auth.signOut()} danger>
-          Logout
+          ログアウト
         </Button>
         {/* </Col> */}
       </Row>

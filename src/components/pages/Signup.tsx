@@ -1,6 +1,6 @@
 import { useState, VFC, useCallback } from 'react'
 import { auth, db, storage } from '../../firebase/index'
-import { Form, Input, Row, Col, Upload, Modal } from 'antd'
+import { Form, Input, Row, Col, Upload, Modal, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useHistory } from 'react-router'
 import LoginHeader from 'components/orgnisms/LoginHeader'
@@ -88,6 +88,10 @@ const Signup: VFC = () => {
     }
   }
 
+  const goLogin = () => {
+    history.push('/login')
+  }
+
   return (
     <>
       {/* ログイン・サインアップ共通のヘッダーをorgnismsから呼び出す */}
@@ -156,8 +160,11 @@ const Signup: VFC = () => {
                 </Upload>
               </ImgCrop>
             </Form.Item>
-            <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
+            <PrimaryButton style={{ width: '100%' }}>サインアップ</PrimaryButton>
           </Form>
+          <Button type="link" onClick={goLogin} style={{ display: 'block', margin: '0 auto' }}>
+            ログインページに飛ぶ
+          </Button>
         </Col>
       </Row>
     </>
