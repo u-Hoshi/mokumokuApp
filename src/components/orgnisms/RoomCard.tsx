@@ -74,7 +74,12 @@ const RoomCard: VFC<room> = (props) => {
         <Card
           // style={{ width: 300, marginTop: 16 }}
           actions={[
-            <SettingOutlined key="setting" />,
+            <SettingOutlined
+              key="setting"
+              onClick={() => {
+                alert('まだ未実装です')
+              }}
+            />,
             // TODO 申し込み済みの時は違うアイコンを表示させ、参加取り消しができるようにする
             <PlusOutlined key="attendance" onClick={() => joinMeeting()} />,
           ]}
@@ -87,7 +92,7 @@ const RoomCard: VFC<room> = (props) => {
           <Row>
             <Col offset={18}>
               <p>参加者</p>
-              <Avatar.Group maxCount={2} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+              <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                 <Avatar src={authorIcon} />
                 {allGuests ? (
                   allGuests.map((guest: guest) => <Avatar src={guest.guestImg} key={guest.guestId} />)

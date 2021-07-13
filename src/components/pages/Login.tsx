@@ -25,6 +25,10 @@ const Login: VFC = () => {
         alert('ログイン失敗です')
       })
   }
+  // TODO 関数名変更する
+  const goSignup = () => {
+    history.push('/signup')
+  }
 
   return (
     <>
@@ -64,6 +68,15 @@ const Login: VFC = () => {
             </Form.Item>
             <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
           </Form>
+          <Button type="link" onClick={goSignup} style={{ display: 'block', margin: '0 auto' }}>
+            サインアップページに飛ぶ
+          </Button>
+          <Col style={{ display: 'block', margin: '50px auto 0' }}>
+            デモアカウント
+            <br />
+            email : sample@sample.com <br />
+            password : sample
+          </Col>
         </Col>
       </Row>
     </>

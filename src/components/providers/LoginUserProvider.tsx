@@ -37,7 +37,6 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
         fetchUser(uid)
         console.log(loginUser)
       } else {
-        alert('ログインして下さい！')
         history.push('/login')
       }
     })
