@@ -24,13 +24,13 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
             .collection(`Users`)
             .doc(uid)
             .get()
-            .then((d) => {
+            .then(async (d) => {
               const data: any = d.data()
-              setLoginUser({
+              await setLoginUser({
                 uid: uid,
-                password: data?.password,
-                displayname: data?.displayname,
-                imgurl: data?.photoURL,
+                password: data.password,
+                displayname: data.displayname,
+                imgurl: data.photoURL,
               })
             })
         }
