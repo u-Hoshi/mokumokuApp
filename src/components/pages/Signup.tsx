@@ -1,22 +1,27 @@
-import { useState, VFC, useCallback } from 'react'
+import { useState, VFC, useCallback, useContext } from 'react'
 import { auth, db, storage } from '../../firebase/index'
-import { Form, Input, Row, Col, Upload, Modal, Button } from 'antd'
+import { Form, Input, Row, Col, Upload, message, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useHistory } from 'react-router'
 import LoginHeader from 'components/orgnisms/LoginHeader'
 import Title from 'antd/lib/typography/Title'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import ImgCrop from 'antd-img-crop'
+import { LoginUserContext } from 'components/providers/LoginUserProvider'
+
+const alert = message
 
 const Signup: VFC = () => {
+  const { loginUser, setLoginUser } = useContext(LoginUserContext)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
-  console.log(email)
   const history = useHistory()
-  const handleSubmit = useCallback(async () => {
-    await auth
+  const handleSubmit = useCallback(() => {
+    console.log('email' + email)
+    console.log('password' + password)
+    auth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         const user = result.user
@@ -33,26 +38,7 @@ const Signup: VFC = () => {
 
           db.collection('Users').doc(uid).set(userInfo)
           // アイコンの保存
-          // useCallback(async () => {
-          const imageName = fileList[0]
-          // TODO ts-ignoreを取り除く
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          storage.ref(`/images/${imageName.name}`).put(imageName.originFileObj)
-
-          storage
-            .ref(`/images/${imageName.name}`)
-            .getDownloadURL()
-            .then((fireBaseUrl) => {
-              db.collection('Users').doc(uid).set(
-                {
-                  photoURL: fireBaseUrl,
-                },
-                { merge: true }
-              )
-              // message.success('保存しました')
-            })
-          // }, [user])
+          saveImg(user)
         }
       })
       .catch((err) => {
@@ -62,15 +48,54 @@ const Signup: VFC = () => {
         console.log('err' + err)
         console.log('サインアップ失敗です')
       })
-  }, [email, password, userName, fileList])
+    console.log('last')
+  }, [email, password, loginUser, userName, fileList])
+
+  const saveImg = useCallback(
+    async (user) => {
+      const imageName = fileList[0]
+      console.log(imageName)
+
+      const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+      const N = 16
+      const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N)))
+        .map((n) => S[n % S.length])
+        .join('')
+      // TODO ts-ignoreを取り除く
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
+      console.log(imageName)
+      storage
+        .ref(`images`)
+        .child(fileName)
+        .getDownloadURL()
+        .then((fireBaseUrl) => {
+          db.collection('Users').doc(user.uid).set(
+            {
+              photoURL: fireBaseUrl,
+            },
+            { merge: true }
+          )
+        })
+    },
+    [fileList[0]]
+  )
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const onFileChange = useCallback(({ fileList: newFileList }) => {
-    setFileList(newFileList)
-  }, [])
+
+  const onFileChange = useCallback(
+    async ({ fileList: newFileList }) => {
+      await setFileList(newFileList)
+      console.log(fileList[0])
+    },
+    [fileList[0]]
+  )
   console.log(fileList)
 
-  const previewImg = async (file: any) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const previewImg = async (file) => {
     let src = file.url
     if (!src) {
       src = await new Promise((resolve) => {
@@ -80,9 +105,12 @@ const Signup: VFC = () => {
       })
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const image = new Image()
     image.src = src
     const imgWindow = window.open(src)
+    console.log(src)
     if (imgWindow !== null) {
       imgWindow.document.write(image.outerHTML)
     }
@@ -147,7 +175,18 @@ const Signup: VFC = () => {
                 }}
               />
             </Form.Item>
-            <Form.Item label="icon" name="icon" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+            <Form.Item
+              label="icon (jpgのみ)"
+              name="icon"
+              style={{ flexDirection: 'column' }}
+              labelAlign={'left'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your icon!',
+                },
+              ]}
+            >
               <ImgCrop rotate>
                 <Upload
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"

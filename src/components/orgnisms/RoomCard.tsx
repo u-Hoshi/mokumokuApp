@@ -28,10 +28,11 @@ const RoomCard: VFC<room> = (props) => {
   const [authorIcon, setAuthorIcon] = useState<string>()
 
   const joinMeeting = () => {
+    console.log(loginUser)
     db.collection('Group1').doc(roomId).collection('guests').add({
       guestId: loginUser.uid,
       guestName: loginUser.displayname,
-      guestImg: loginUser.imgurl,
+      guestImg: loginUser?.imgurl,
     })
   }
 
