@@ -96,7 +96,11 @@ const RoomCard: VFC<room> = (props) => {
               <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                 <Avatar src={authorIcon} />
                 {allGuests ? (
-                  allGuests.map((guest: guest) => <Avatar src={guest.guestImg} key={guest.guestId} />)
+                  allGuests.map((guest: guest) => (
+                    <Tooltip title={guest.guestName} placement="top">
+                      <Avatar src={guest.guestImg} key={guest.guestId} />
+                    </Tooltip>
+                  ))
                 ) : (
                   <p>...loading</p>
                 )}
