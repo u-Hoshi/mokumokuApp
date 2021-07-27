@@ -9,13 +9,13 @@ import { Route, Switch } from 'react-router'
 export const Router: VFC = () => {
   return (
     <Switch>
-      <Route path="/login">
-        <Login />
-      </Route>
-      <Route path="/signup">
-        <Signup />
-      </Route>
       <LoginUserProvider>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
         <Route exact path="/">
           <Room />
         </Route>

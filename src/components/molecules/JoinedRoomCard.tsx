@@ -29,7 +29,7 @@ const RoomCard: VFC<room> = (props) => {
 
   const joinMeeting = () => {
     console.log(loginUser)
-    db.collection('Group1').doc(roomId).collection('guests').add({
+    db.collection('Group1').doc(roomId).collection('guests').doc(loginUser.uid).set({
       guestId: loginUser.uid,
       guestName: loginUser.displayname,
       guestImg: loginUser?.imgurl,
@@ -45,6 +45,7 @@ const RoomCard: VFC<room> = (props) => {
         setAuthorName(doc.data()?.displayname)
         setAuthorIcon(doc.data()?.photoURL)
       } else {
+        // TODO このRoomCardコンポーネントをメモ化
         console.log('No such document!')
       }
     })
@@ -71,34 +72,37 @@ const RoomCard: VFC<room> = (props) => {
   }, [])
   return (
     <>
-      <Col span={8}>
+      <Col>
         <Card
           // style={{ width: 300, marginTop: 16 }}
-          actions={[
-            <SettingOutlined
-              key="setting"
-              onClick={() => {
-                alert('まだ未実装です')
-              }}
-            />,
-            // TODO 申し込み済みの時は違うアイコンを表示させ、参加取り消しができるようにする
-            <PlusOutlined key="attendance" onClick={() => joinMeeting()} />,
-          ]}
+          actions={
+            [
+              // <SettingOutlined
+              //   key="setting"
+              //   onClick={() => {
+              //     alert('まだ未実装です')
+              //   }}
+              // />,
+              // TODO 申し込み済みの時は違うアイコンを表示させ、参加取り消しができるようにする
+              // <PlusOutlined key="attendance" onClick={() => joinMeeting()} />,
+            ]
+          }
         >
           <Meta avatar={<Avatar src={authorIcon} />} title="もくもく会" description={authorName} />
           <h3>{`${startTimeDT[1] + 1}月${startTimeDT[2]}日${startTimeDT[3]}時${startTimeDT[4]}分から`}</h3>
           <h3>{`${endTimeDT[1] + 1}月${endTimeDT[2]}日${endTimeDT[3]}時${endTimeDT[4]}分まで`}</h3>
           <h4>{meettype}</h4>
           <h4>{message}</h4>
+          <h4>JoinedRoomCard</h4>
           <Row>
             <Col offset={18}>
-              <p>参加者</p>
+              <p>参加ずみ</p>
               <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                 <Avatar src={authorIcon} />
                 {allGuests ? (
                   allGuests.map((guest: guest) => (
-                    <Tooltip title={guest.guestName} placement="top">
-                      <Avatar src={guest.guestImg} key={guest.guestId} />
+                    <Tooltip title={guest.guestName} placement="top" key={guest.guestId}>
+                      <Avatar src={guest.guestImg} />
                     </Tooltip>
                   ))
                 ) : (

@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd'
 import RoomDetail from 'components/molecules/RoomDetail'
 import HeaderLayout from 'components/themplates/HeaderLayout'
-import RoomTable from 'components/themplates/RoomTable'
+import RoomTable from 'components/orgnisms/RoomTable'
 import { VFC, useContext } from 'react'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
