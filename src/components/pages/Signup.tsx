@@ -169,7 +169,7 @@ const Signup: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input
+              <Input.Password
                 onChange={(e) => {
                   setPassword(e.target.value)
                 }}
