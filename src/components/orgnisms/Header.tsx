@@ -1,15 +1,17 @@
 import { Row, Anchor, Col, Button } from 'antd'
 import { Typography } from 'antd'
 const { Title, Text } = Typography
-import { VFC } from 'react'
+import { VFC, useContext } from 'react'
 import { useHistory } from 'react-router'
 import { auth } from '../../firebase/index'
+import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const Header: VFC = () => {
+  const { loginUser } = useContext(LoginUserContext)
   const history = useHistory()
 
   const onClickUserSetting = () => {
-    history.push('/usersetting')
+    history.push(`/usersetting/${loginUser.uid}`)
   }
 
   return (
