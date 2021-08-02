@@ -15,7 +15,7 @@ type room = {
 }
 
 type guest = {
-  guestId: string
+  id: string
   guestName: string
   guestImg: string
 }
@@ -97,8 +97,8 @@ const RoomCard: VFC<room> = (props) => {
                 <Avatar src={authorIcon} />
                 {allGuests ? (
                   allGuests.map((guest: guest) => (
-                    <Tooltip title={guest.guestName} placement="top">
-                      <Avatar src={guest.guestImg} key={guest.guestId} />
+                    <Tooltip key={guest.id} title={guest.guestName} placement="top">
+                      <Avatar src={guest.guestImg} key={guest.id} />
                     </Tooltip>
                   ))
                 ) : (

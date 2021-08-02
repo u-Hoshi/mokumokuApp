@@ -19,7 +19,7 @@ export const Router: VFC = () => {
         <Route exact path="/">
           <Room />
         </Route>
-        <Route path="/usersetting">
+        <Route path="/usersetting/:id">
           <UserSetting />
         </Route>
       </LoginUserProvider>
