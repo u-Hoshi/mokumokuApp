@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col } from 'antd'
+import { Form, Input, Row, Col, message } from 'antd'
 import { useCallback, useContext, useEffect, useState, VFC } from 'react'
 import { useParams } from 'react-router-dom'
 import PrimaryButton from 'components/atoms/PrimaryButton'
@@ -54,13 +54,13 @@ const UserSetting: VFC = () => {
           }
 
           user?.updateEmail(`${email}`).catch((error: any) => {
-            // エラーメッセージを表示
+            message.success('変更に失敗しました')
           })
-          // 成功メッセージを表示
-          // ホームに飛ばす
+          message.success('変更に成功しました')
+          history.push('/')
         })
         .catch((error) => {
-          // エラーメッセージを表示
+          message.success('変更に失敗しました')
         })
     },
     [email, userName, userMemo]
