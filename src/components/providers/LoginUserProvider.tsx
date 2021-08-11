@@ -28,6 +28,7 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
               const data: any = d.data()
               await setLoginUser({
                 uid: uid,
+                email: data.email,
                 password: data.password,
                 displayname: data.displayname,
                 imgurl: data.photoURL,
