@@ -1,30 +1,33 @@
-import { Form, Input, Button, Row, Typography, Col, Upload } from 'antd'
-import { useCallback, useContext, useEffect, useLayoutEffect, useState, VFC } from 'react'
+import { Form, Input, Row, Col } from 'antd'
+import { useCallback, useContext, useEffect, useState, VFC } from 'react'
 import { useParams } from 'react-router-dom'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import { auth, db } from '../../firebase/index'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import { useHistory } from 'react-router'
+import firebase from 'firebase'
+import HeaderLayout from 'components/themplates/HeaderLayout'
 
-type User = {
-  email: string
-  displayname: string
-  password: string
-  photoURL: string
-  uid: string
-}
+// type User = {
+//   email: string
+//   displayname: string
+//   password: string
+//   photoURL: string
+//   uid: string
+// }
 
 const UserSetting: VFC = () => {
-  const { loginUser, setLoginUser } = useContext(LoginUserContext)
+  const { loginUser } = useContext(LoginUserContext)
   const { id } = useParams<{ id: string }>()
   const [userInfo, setUserInfo] = useState<any>()
   const [userName, setUserName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [userMemo, setUserMemo] = useState<string>('')
+  const history = useHistory()
 
   const fetchUser = async (id: string) => {
     const document = await db.doc(`Users/${id}`).get()
     console.log(document.data()?.email)
-    console.log('35')
 
     return document.data()
   }
@@ -33,30 +36,31 @@ const UserSetting: VFC = () => {
     fetchUser(id).then((user) => {
       setUserInfo(user)
     })
-    console.log('4')
   }, [])
 
   const handleSubmit = useCallback(
     (email: string, userName: string, userMemo: string) => {
-      if (userName !== '' || email !== '') {
-        db.collection('Users').doc(loginUser.uid).update({
-          displayName: userName,
-          email: email,
-        })
-      }
-      db.collection('Users').doc(loginUser.uid).update({
-        usermemo: userMemo,
-      })
-      const user = auth.currentUser
-
-      loginUser
-        .updateEmail(`${email}`)
+      const user: firebase.User | null = auth.currentUser
+      const credential = firebase.auth.EmailAuthProvider.credential(loginUser.email, loginUser.password)
+      user
+        ?.reauthenticateWithCredential(credential)
         .then(() => {
-          // Update successful
-          // ...
+          if (userName !== '' || email !== '') {
+            db.collection('Users').doc(loginUser.uid).update({
+              displayname: userName,
+              email: email,
+              usermemo: userMemo,
+            })
+          }
+
+          user?.updateEmail(`${email}`).catch((error: any) => {
+            // エラーメッセージを表示
+          })
+          // 成功メッセージを表示
+          // ホームに飛ばす
         })
-        .catch((error: any) => {
-          console.log(error)
+        .catch((error) => {
+          // エラーメッセージを表示
         })
     },
     [email, userName, userMemo]
@@ -64,10 +68,7 @@ const UserSetting: VFC = () => {
 
   return (
     <>
-      <h1>usersetting</h1>
-      <p>現在開発中です。もうしばらくお待ちください</p>
-      <p>{id}</p>
-      {/* ログイン・サインアップ共通のヘッダーをorgnismsから呼び出す */}
+      <HeaderLayout />
       <Row justify="center">
         <Col span={10}>
           <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
@@ -111,8 +112,8 @@ const UserSetting: VFC = () => {
                 }}
               />
             </Form.Item>
+            <PrimaryButton>更新</PrimaryButton>
           </Form>
-          <PrimaryButton>更新</PrimaryButton>
         </Col>
       </Row>
     </>
