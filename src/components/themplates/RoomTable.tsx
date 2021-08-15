@@ -8,10 +8,11 @@ const RoomTable: VFC = () => {
   type room = {
     id: string
     AuthorId: string
-    endtimeDT: []
-    meettype: string
+    hostDay: string
+    endTime: []
+    meetType: string
     message: string
-    starttimeDT: []
+    startTime: []
   }
   // TODO anyを取り除く
   const [allrooms, setRooms] = useState<any>([])
@@ -38,9 +39,10 @@ const RoomTable: VFC = () => {
             <RoomCard
               key={room.id}
               AuthorId={room.AuthorId}
-              startTimeDT={room.starttimeDT}
-              endTimeDT={room.endtimeDT}
-              meettype={room.meettype}
+              hostDay={room.hostDay}
+              startTime={room.startTime}
+              endTime={room.endTime}
+              meetType={room.meetType}
               message={room.message}
               roomId={room.id}
             />
