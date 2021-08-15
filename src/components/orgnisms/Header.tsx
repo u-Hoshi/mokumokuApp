@@ -14,6 +14,10 @@ const Header: VFC = () => {
     history.push(`/usersetting/${loginUser.uid}`)
   }
 
+  const onClickTitle = () => {
+    history.push('/')
+  }
+
   return (
     <>
       <Row
@@ -21,7 +25,11 @@ const Header: VFC = () => {
         style={{ backgroundColor: '#000224', color: 'white', padding: '20px 15px', marginBottom: '15px' }}
       >
         {/* <Col> */}
-        <Title level={3} style={{ color: 'white', textAlign: 'center', marginBottom: '0', paddingRight: '10px' }}>
+        <Title
+          level={3}
+          onClick={onClickTitle}
+          style={{ color: 'white', textAlign: 'center', marginBottom: '0', paddingRight: '10px' }}
+        >
           もくもく会アプリ
         </Title>
         {/* </Col> */}
