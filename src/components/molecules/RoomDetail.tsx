@@ -1,20 +1,23 @@
 import { useState, VFC } from 'react'
-import { DatePicker, Form, message, Radio, RadioChangeEvent } from 'antd'
+import { DatePicker, Form, message, Radio, RadioChangeEvent, TimePicker } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
-// import moment from 'moment'
+import dayjs from 'dayjs'
 import { db } from '../../firebase/index'
+import { RangeValue } from 'rc-picker/lib/interface.d'
+import moment, { Moment } from 'moment'
 
 const alert = message
 
-const { RangePicker } = DatePicker
+// const { RangePicker } = DatePicker
 
 const RoomDetail: VFC<any> = (props) => {
   const { user } = props
   // 第一引数のmomentの形でデータをセット
-  const [startTimeDT, setStartTimeDT] = useState({})
-  const [endTimeDT, setEndTimeDT] = useState({})
+  const [hostDay, setHostDay] = useState({})
+  const [startTime, setStartTime] = useState({})
+  const [endTime, setEndTime] = useState({})
   const [meetType, setMeetType] = useState({})
   const [message, setMessage] = useState<string>('')
   const [form] = Form.useForm()
@@ -28,9 +31,10 @@ const RoomDetail: VFC<any> = (props) => {
   const onFinish = () => {
     try {
       db.collection('Group1').add({
-        starttimeDT: startTimeDT,
-        endtimeDT: endTimeDT,
-        meettype: meetType,
+        hostDay: hostDay,
+        startTime: startTime,
+        endTime: endTime,
+        meetType: meetType,
         message: message,
         Author: user.displayname,
         AuthorId: user.uid,
@@ -43,14 +47,28 @@ const RoomDetail: VFC<any> = (props) => {
       console.log(err)
     }
   }
+  const onChangeDay = (day: Moment | null, dateString: string) => {
+    console.log(dateString)
+    if (day !== null) {
+      setHostDay(day.toArray())
+    }
+  }
 
-  // TODO:anyを取り除く
-  const onChangeTime = (dates: any, dateStrings: [string, string]) => {
+  function disabledDate(current: any) {
+    // Can not select days before today and today
+    return current && current < dayjs().subtract(1, 'day')
+  }
+
+  // TODO:anyを取り除く RangeValue<Moment>
+  const onChangeTime = (times: RangeValue<Moment>, dateStrings: [string, string]) => {
+    // const onChangeTime = (times: any, formatString: [string, string]) => {
     // momentの形で取得できるdatesで受け取ることにする
-    setStartTimeDT(dates[0].toArray())
-    setEndTimeDT(dates[1].toArray())
-    console.log('Selected Time: ', dates[0].toArray())
-    console.log('Formatted Selected Time: ', endTimeDT)
+    console.log(dateStrings)
+    console.log(typeof times)
+    if (times !== null) {
+      setStartTime(times![0]!.toArray())
+      setEndTime(times![1]!.toArray())
+    }
   }
 
   const onChangeType = (e: RadioChangeEvent) => {
@@ -61,8 +79,13 @@ const RoomDetail: VFC<any> = (props) => {
   return (
     <>
       <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
-        <Form.Item name="date-picker" label="DatePicker" rules={[{ required: true, message: 'Please input time!' }]}>
-          <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} />
+        <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: 'Please input time!' }]}>
+          <DatePicker format="YYYY-MM-DD" onChange={onChangeDay} disabledDate={disabledDate} />
+          {/* <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} /> */}
+        </Form.Item>
+        <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: 'Please input time!' }]}>
+          <TimePicker.RangePicker format="HH:mm" onChange={onChangeTime} />
+          {/* <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} /> */}
         </Form.Item>
         <Form.Item name="radio-group" label="雰囲気" rules={[{ required: true, message: 'Please input type!' }]}>
           <Radio.Group onChange={onChangeType}>

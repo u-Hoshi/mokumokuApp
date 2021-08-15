@@ -7,10 +7,11 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 type room = {
   AuthorId: string
-  endTimeDT: number[]
-  meettype: string
+  hostDay: string
+  endTime: number[]
+  meetType: string
   message?: string
-  startTimeDT: number[]
+  startTime: number[]
   roomId: string
 }
 
@@ -21,7 +22,7 @@ type guest = {
 }
 
 const RoomCard: VFC<room> = (props) => {
-  const { AuthorId, endTimeDT, meettype, message, startTimeDT, roomId } = props
+  const { AuthorId, hostDay, endTime, meetType, message, startTime, roomId } = props
   const { loginUser } = useContext(LoginUserContext)
 
   const [authorName, setAuthorName] = useState<string>()
@@ -86,9 +87,9 @@ const RoomCard: VFC<room> = (props) => {
           ]}
         >
           <Meta avatar={<Avatar src={authorIcon} />} title="もくもく会" description={authorName} />
-          <h3>{`${startTimeDT[1] + 1}月${startTimeDT[2]}日${startTimeDT[3]}時${startTimeDT[4]}分から`}</h3>
-          <h3>{`${endTimeDT[1] + 1}月${endTimeDT[2]}日${endTimeDT[3]}時${endTimeDT[4]}分まで`}</h3>
-          <h4>{meettype}</h4>
+          <h3>{`${hostDay[1] + 1}月${hostDay[2]}日`}</h3>
+          <h3>{`${startTime[3]}時${startTime[4]}分から${endTime[3]}時${endTime[4]}分まで`}</h3>
+          <h4>{meetType}</h4>
           <h4>{message}</h4>
           <Row>
             <Col offset={18}>
