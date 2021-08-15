@@ -54,13 +54,15 @@ const UserSetting: VFC = () => {
           }
 
           user?.updateEmail(`${email}`).catch((error: any) => {
-            message.success('変更に失敗しました')
+            message.error('変更に失敗しました。時間を空けてから再変更してください。')
+            history.push('/')
           })
           message.success('変更に成功しました')
           history.push('/')
         })
         .catch((error) => {
-          message.success('変更に失敗しました')
+          message.error('変更に失敗しました。時間を空けてから再変更してください。')
+          history.push('/')
         })
     },
     [email, userName, userMemo]
