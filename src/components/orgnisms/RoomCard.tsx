@@ -4,10 +4,11 @@ import { Skeleton, Card, Avatar, Tooltip, Col, Row } from 'antd'
 import { PlusOutlined, SettingOutlined } from '@ant-design/icons'
 const { Meta } = Card
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import moment from 'moment'
 
 type room = {
   AuthorId: string
-  hostDay: string
+  hostDay: number[]
   endTime: number[]
   meetType: string
   message?: string
@@ -70,11 +71,24 @@ const RoomCard: VFC<room> = (props) => {
         setGuests(Guests)
       })
   }, [])
+
+  let isPastHostDay = false
+  let hostDayInt = 0
+  let nowInt = 0
+
+  for (let i = 0; i < 3; i++) {
+    hostDayInt += hostDay[i]
+    nowInt += moment().toArray()[i]
+  }
+  if (hostDayInt >= nowInt) {
+    isPastHostDay = true
+  }
+  const cardColor = isPastHostDay ? 'white' : 'gray'
   return (
     <>
       <Col span={8}>
         <Card
-          // style={{ width: 300, marginTop: 16 }}
+          style={{ backgroundColor: `${cardColor}` }}
           actions={[
             <SettingOutlined
               key="setting"
