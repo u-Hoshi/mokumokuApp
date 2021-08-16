@@ -3,12 +3,13 @@ import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
 import Room from 'components/pages/Room'
 import { Row } from 'antd'
+import moment, { Moment, now } from 'moment'
 
 const RoomTable: VFC = () => {
   type room = {
     id: string
     AuthorId: string
-    hostDay: string
+    hostDay: []
     endTime: []
     meetType: string
     message: string
@@ -37,18 +38,20 @@ const RoomTable: VFC = () => {
     <>
       <Row gutter={[8, 40]}>
         {allrooms ? (
-          allrooms.map((room: room) => (
-            <RoomCard
-              key={room.id}
-              AuthorId={room.AuthorId}
-              hostDay={room.hostDay}
-              startTime={room.startTime}
-              endTime={room.endTime}
-              meetType={room.meetType}
-              message={room.message}
-              roomId={room.id}
-            />
-          ))
+          allrooms.map((room: room) => {
+            return (
+              <RoomCard
+                key={room.id}
+                roomId={room.id}
+                AuthorId={room.AuthorId}
+                hostDay={room.hostDay}
+                startTime={room.startTime}
+                endTime={room.endTime}
+                meetType={room.meetType}
+                message={room.message}
+              />
+            )
+          })
         ) : (
           <p>...loading</p>
         )}
