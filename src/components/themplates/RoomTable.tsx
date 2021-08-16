@@ -19,17 +19,19 @@ const RoomTable: VFC = () => {
 
   // 全ルームの情報を取得取得
   useEffect(() => {
-    db.collection('Group1').onSnapshot((snapshot) => {
-      const rooms = snapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        }
+    db.collection('Group1')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        const rooms = snapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          }
+        })
+        console.log(rooms)
+        // ↑では[{}]だが↓では[object object]の形で代入される
+        setRooms(rooms)
       })
-      console.log(rooms)
-      // ↑では[{}]だが↓では[object object]の形で代入される
-      setRooms(rooms)
-    })
   }, [])
   return (
     <>

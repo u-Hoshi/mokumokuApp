@@ -5,6 +5,7 @@ import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
 import dayjs from 'dayjs'
 import { db } from '../../firebase/index'
+import firebase from 'firebase'
 import { RangeValue } from 'rc-picker/lib/interface.d'
 import moment, { Moment } from 'moment'
 
@@ -31,13 +32,14 @@ const RoomDetail: VFC<any> = (props) => {
   const onFinish = () => {
     try {
       db.collection('Group1').add({
+        Author: user.displayname,
+        AuthorId: user.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         hostDay: hostDay,
         startTime: startTime,
         endTime: endTime,
         meetType: meetType,
         message: message,
-        Author: user.displayname,
-        AuthorId: user.uid,
       })
       onReset()
       setMessage('')
