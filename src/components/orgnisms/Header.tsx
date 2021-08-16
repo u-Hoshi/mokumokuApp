@@ -22,7 +22,13 @@ const Header: VFC = () => {
     <>
       <Row
         align="middle"
-        style={{ backgroundColor: '#000224', color: 'white', padding: '20px 15px', marginBottom: '15px' }}
+        style={{
+          backgroundColor: '#000224',
+          color: 'white',
+          padding: '20px 15px',
+          marginBottom: '15px',
+          cursor: 'pointer',
+        }}
       >
         {/* <Col> */}
         <Title
@@ -34,12 +40,26 @@ const Header: VFC = () => {
         </Title>
         {/* </Col> */}
         {/* <Col> */}
-        <Text onClick={onClickUserSetting} style={{ color: 'white', textAlign: 'center', cursor: 'pointer' }}>
+        <Button
+          ghost
+          onClick={onClickUserSetting}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
           ユーザ設定
-        </Text>
+        </Button>
         {/* </Col> */}
         {/* <Col offset={23}> */}
-        <Button type="link" onClick={() => auth.signOut()} danger>
+        <Button
+          ghost
+          onClick={() => auth.signOut()}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
           ログアウト
         </Button>
         {/* </Col> */}
