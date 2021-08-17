@@ -1,9 +1,8 @@
 import RoomCard from 'components/orgnisms/RoomCard'
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
-import Room from 'components/pages/Room'
 import { Row } from 'antd'
-import moment, { Moment, now } from 'moment'
+import RoomCalendar from 'components/orgnisms/RoomCalendar'
 
 const RoomTable: VFC = () => {
   type room = {
@@ -16,7 +15,7 @@ const RoomTable: VFC = () => {
     startTime: []
   }
   // TODO anyを取り除く
-  const [allrooms, setRooms] = useState<any>([])
+  const [rooms, setRooms] = useState<any>([])
 
   // 全ルームの情報を取得取得
   useEffect(() => {
@@ -37,8 +36,8 @@ const RoomTable: VFC = () => {
   return (
     <>
       <Row gutter={[8, 40]}>
-        {allrooms ? (
-          allrooms.map((room: room) => {
+        {rooms ? (
+          rooms.map((room: room) => {
             return (
               <RoomCard
                 key={room.id}
@@ -56,6 +55,7 @@ const RoomTable: VFC = () => {
           <p>...loading</p>
         )}
       </Row>
+      <RoomCalendar rooms={rooms} />
     </>
   )
 }
