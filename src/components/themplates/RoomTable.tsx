@@ -1,9 +1,8 @@
 import RoomCard from 'components/orgnisms/RoomCard'
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
-import Room from 'components/pages/Room'
-import { Row } from 'antd'
-import moment, { Moment, now } from 'moment'
+import { Col, Row, Switch } from 'antd'
+import RoomCalendar from 'components/orgnisms/RoomCalendar'
 
 const RoomTable: VFC = () => {
   type room = {
@@ -16,7 +15,7 @@ const RoomTable: VFC = () => {
     startTime: []
   }
   // TODO anyを取り除く
-  const [allrooms, setRooms] = useState<any>([])
+  const [rooms, setRooms] = useState<any>([])
 
   // 全ルームの情報を取得取得
   useEffect(() => {
@@ -34,28 +33,43 @@ const RoomTable: VFC = () => {
         setRooms(rooms)
       })
   }, [])
+
+  const [isDisplay, setIsDisplay] = useState(false)
+
+  const onChangeSwitch = () => {
+    setIsDisplay(!isDisplay)
+  }
+
   return (
     <>
-      <Row gutter={[8, 40]}>
-        {allrooms ? (
-          allrooms.map((room: room) => {
-            return (
-              <RoomCard
-                key={room.id}
-                roomId={room.id}
-                AuthorId={room.AuthorId}
-                hostDay={room.hostDay}
-                startTime={room.startTime}
-                endTime={room.endTime}
-                meetType={room.meetType}
-                message={room.message}
-              />
-            )
-          })
-        ) : (
-          <p>...loading</p>
-        )}
-      </Row>
+      <Col offset={1} span={14} style={{ paddingBottom: '14px' }}>
+        表示切り替え：
+        <Switch size="default" checkedChildren="カレンダー" unCheckedChildren="カード" onChange={onChangeSwitch} />
+      </Col>
+      {isDisplay ? (
+        <RoomCalendar rooms={rooms} />
+      ) : (
+        <Row gutter={[8, 40]}>
+          {rooms ? (
+            rooms.map((room: room) => {
+              return (
+                <RoomCard
+                  key={room.id}
+                  roomId={room.id}
+                  AuthorId={room.AuthorId}
+                  hostDay={room.hostDay}
+                  startTime={room.startTime}
+                  endTime={room.endTime}
+                  meetType={room.meetType}
+                  message={room.message}
+                />
+              )
+            })
+          ) : (
+            <p>...loading</p>
+          )}
+        </Row>
+      )}
     </>
   )
 }
