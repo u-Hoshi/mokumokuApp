@@ -76,10 +76,9 @@ const RoomCard: VFC<room> = (props) => {
   let hostDayInt = 0
   let nowInt = 0
 
-  for (let i = 0; i < 3; i++) {
-    hostDayInt += hostDay[i]
-    nowInt += moment().toArray()[i]
-  }
+  hostDayInt = hostDay[0] * 10000 + hostDay[1] * 100 + hostDay[2]
+  nowInt = moment().toArray()[0] * 10000 + moment().toArray()[1] * 100 + moment().toArray()[2]
+
   if (hostDayInt >= nowInt) {
     isPastHostDay = true
   }
