@@ -1,5 +1,5 @@
 import { useState, VFC } from 'react'
-import { DatePicker, Form, message, Radio, RadioChangeEvent, TimePicker, Select } from 'antd'
+import { DatePicker, Form, message, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
@@ -15,6 +15,7 @@ const { Option } = Select
 const RoomDetail: VFC<any> = (props) => {
   const { user } = props
   // 第一引数のmomentの形でデータをセット
+  const [meetTile, setMeetTitle] = useState<string>('')
   const [hostDay, setHostDay] = useState<number[]>([])
   const [startTime, setStartTime] = useState<number[]>([])
   const [endTime, setEndTime] = useState<number[]>([])
@@ -31,6 +32,7 @@ const RoomDetail: VFC<any> = (props) => {
       hostDay[0] * 100000000 + hostDay[1] * 1000000 + hostDay[2] * 10000 + startTime[3] * 100 + startTime[4]
     try {
       db.collection('Group1').add({
+        meetTitle: meetTile,
         Author: user.displayname,
         AuthorId: user.uid,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -48,6 +50,13 @@ const RoomDetail: VFC<any> = (props) => {
       alert.error('ルーム追加失敗')
     }
   }
+
+  const onChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMeetTitle(event.target.value)
+  }
+
+  console.log(meetTile)
+
   const onChangeDay = (day: Moment | null, dateString: string) => {
     console.log(dateString)
     if (day !== null) {
@@ -74,14 +83,17 @@ const RoomDetail: VFC<any> = (props) => {
   return (
     <>
       <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
+        <Form.Item name="title" label="タイトル" rules={[{ required: true, message: 'タイトルを記入して下さい' }]}>
+          <Input defaultValue="もくもく会" onChange={onChangeTitle} style={{ width: 150 }} />
+        </Form.Item>
         <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: '日付を記入して下さい' }]}>
-          <DatePicker format="YYYY-MM-DD" onChange={onChangeDay} disabledDate={disabledDate} />
+          <DatePicker format="YYYY-MM-DD" style={{ width: 150 }} onChange={onChangeDay} disabledDate={disabledDate} />
         </Form.Item>
         <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: '時間を記入して下さい' }]}>
           <TimePicker.RangePicker format="HH:mm" onChange={onChangeTime} />
         </Form.Item>
         <Form.Item name="radio-group" label="カテゴリ" rules={[{ required: true, message: 'Please input type!' }]}>
-          <Select defaultValue="フロントエンド" style={{ width: 180 }} onChange={onChangeType}>
+          <Select defaultValue="フロントエンド" style={{ width: 150 }} onChange={onChangeType}>
             <Option value="フロントエンド">フロントエンド</Option>
             <Option value="バックエンド">バックエンド</Option>
             <Option value="インフラ">インフラ</Option>
