@@ -1,5 +1,5 @@
 import { useState, VFC } from 'react'
-import { DatePicker, Form, message, Radio, RadioChangeEvent, TimePicker } from 'antd'
+import { DatePicker, Form, message, Radio, RadioChangeEvent, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import TextArea from 'antd/lib/input/TextArea'
@@ -10,6 +10,7 @@ import { RangeValue } from 'rc-picker/lib/interface.d'
 import { Moment } from 'moment'
 
 const alert = message
+const { Option } = Select
 
 const RoomDetail: VFC<any> = (props) => {
   const { user } = props
@@ -21,12 +22,10 @@ const RoomDetail: VFC<any> = (props) => {
   const [message, setMessage] = useState<string>('')
   const [form] = Form.useForm()
 
-  // 送信後のフォームのリセット
   const onReset = () => {
     form.resetFields()
   }
 
-  // ルームの追加処理
   const onFinish = () => {
     const startDayTimeInt =
       hostDay[0] * 100000000 + hostDay[1] * 1000000 + hostDay[2] * 10000 + startTime[3] * 100 + startTime[4]
@@ -47,7 +46,6 @@ const RoomDetail: VFC<any> = (props) => {
       alert.success('ルーム追加成功')
     } catch (err) {
       alert.error('ルーム追加失敗')
-      console.log(err)
     }
   }
   const onChangeDay = (day: Moment | null, dateString: string) => {
@@ -58,45 +56,38 @@ const RoomDetail: VFC<any> = (props) => {
   }
 
   function disabledDate(current: any) {
-    // Can not select days before today and today
     return current && current < dayjs().subtract(1, 'day')
   }
 
-  // TODO:anyを取り除く RangeValue<Moment>
   const onChangeTime = (times: RangeValue<Moment>, dateStrings: [string, string]) => {
-    // const onChangeTime = (times: any, formatString: [string, string]) => {
-    // momentの形で取得できるdatesで受け取ることにする
-    console.log(dateStrings)
-    console.log(typeof times)
     if (times !== null) {
       setStartTime(times![0]!.toArray())
       setEndTime(times![1]!.toArray())
     }
   }
 
-  const onChangeType = (e: RadioChangeEvent) => {
+  const onChangeType = (value: string) => {
     //momentという形で渡す
-    setMeetType(e.target.value)
+    setMeetType(value)
   }
 
   return (
     <>
       <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
-        <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: 'Please input time!' }]}>
+        <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: '日付を記入して下さい' }]}>
           <DatePicker format="YYYY-MM-DD" onChange={onChangeDay} disabledDate={disabledDate} />
-          {/* <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} /> */}
         </Form.Item>
-        <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: 'Please input time!' }]}>
+        <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: '時間を記入して下さい' }]}>
           <TimePicker.RangePicker format="HH:mm" onChange={onChangeTime} />
-          {/* <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onChangeTime} /> */}
         </Form.Item>
-        <Form.Item name="radio-group" label="雰囲気" rules={[{ required: true, message: 'Please input type!' }]}>
-          <Radio.Group onChange={onChangeType}>
-            <Radio value={'もくもく'}>もくもく</Radio>
-            <Radio value={'わいわい'}>わいわい</Radio>
-          </Radio.Group>
+        <Form.Item name="radio-group" label="カテゴリ" rules={[{ required: true, message: 'Please input type!' }]}>
+          <Select defaultValue="フロントエンド" style={{ width: 180 }} onChange={onChangeType}>
+            <Option value="フロントエンド">フロントエンド</Option>
+            <Option value="バックエンド">バックエンド</Option>
+            <Option value="インフラ">インフラ</Option>
+          </Select>
         </Form.Item>
-        <Form.Item>
+        <Form.Item name="note" label="コメント" rules={[{ required: true, message: 'コメントを記入して下さい' }]}>
           <TextArea rows={4} placeholder="今日やること" value={message} onChange={(e) => setMessage(e.target.value)} />
         </Form.Item>
         <PrimaryButton style={{ marginLeft: '8' }}>会を追加する</PrimaryButton>
