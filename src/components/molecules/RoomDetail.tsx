@@ -55,8 +55,6 @@ const RoomDetail: VFC<any> = (props) => {
     setMeetTitle(event.target.value)
   }
 
-  console.log(meetTile)
-
   const onChangeDay = (day: Moment | null, dateString: string) => {
     console.log(dateString)
     if (day !== null) {

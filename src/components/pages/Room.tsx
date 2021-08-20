@@ -8,6 +8,8 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 const Room: VFC = () => {
   // TODO ↓をRoomDetailの方に移植する
   const { loginUser, setLoginUser } = useContext(LoginUserContext)
+  console.log('room')
+  console.log(loginUser)
   return (
     <>
       <HeaderLayout />

@@ -24,9 +24,9 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
             .collection(`Users`)
             .doc(uid)
             .get()
-            .then(async (d) => {
+            .then((d) => {
               const data: any = d.data()
-              await setLoginUser({
+              setLoginUser({
                 uid: uid,
                 email: data.email,
                 password: data.password,
@@ -42,7 +42,7 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
       }
     })
   }, [])
-
+  console.log(loginUser)
   // 別のProviderで保持するのもアリ
   return <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>{children}</LoginUserContext.Provider>
 }

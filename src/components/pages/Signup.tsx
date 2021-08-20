@@ -16,7 +16,13 @@ const Signup: VFC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([])
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([
+    {
+      uid: '-5',
+      name: 'image.png',
+      status: 'success',
+    },
+  ])
   const history = useHistory()
   const handleSubmit = useCallback(() => {
     console.log('email' + email)
@@ -87,7 +93,15 @@ const Signup: VFC = () => {
   const onFileChange = useCallback(
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
-      console.log(fileList[0])
+      console.log(fileList[0]?.status)
+      if (fileList[0]?.status === 'error') {
+        console.log('done')
+      }
+      // if (newFileList.file.status === 'done') {
+      //   message.success(`${newFileList.file.name} file uploaded successfully`)
+      // } else if (newFileList.file.status === 'error') {
+      //   message.error(`${newFileList.file.name} file upload failed.`)
+      // }
     },
     [fileList[0]]
   )
@@ -176,16 +190,16 @@ const Signup: VFC = () => {
               />
             </Form.Item>
             <Form.Item
-              label="icon (jpgのみ)"
-              name="icon"
+              label="icon"
+              name="file"
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your icon!',
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: 'Please input your icon!',
+              //   },
+              // ]}
             >
               <ImgCrop rotate>
                 <Upload
