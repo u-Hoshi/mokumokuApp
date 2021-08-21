@@ -7,7 +7,7 @@ import { db } from '../../firebase/index'
 import firebase from 'firebase'
 import { RangeValue } from 'rc-picker/lib/interface.d'
 import { Moment } from 'moment'
-import RoomDetail from 'components/molecules/RoomDetail'
+import SetRoomDetail from 'components/molecules/SetRoomDetail'
 
 const alert = message
 
@@ -37,7 +37,7 @@ const AddRoom: VFC<any> = (props) => {
         startTime: startTime,
         endTime: endTime,
         meetType: meetType,
-        message: meetMessage,
+        meetMessage: meetMessage,
       })
       onReset()
       setMeetMessage('')
@@ -75,19 +75,17 @@ const AddRoom: VFC<any> = (props) => {
   }
 
   const onChangeType = (value: string) => {
-    //momentという形で渡す
     setMeetType(value)
   }
 
   const onChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //momentという形で渡す
     setMeetMessage(event.target.value)
   }
 
   return (
     <>
       <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
-        <RoomDetail
+        <SetRoomDetail
           onChangeTitle={onChangeTitle}
           onChangeDay={onChangeDay}
           disabledDate={disabledDate}

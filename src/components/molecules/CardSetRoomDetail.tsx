@@ -6,36 +6,63 @@ import moment from 'moment'
 
 const { Option } = Select
 
-const SetRoomDetail: VFC<any> = (props) => {
-  const { onChangeTitle, onChangeDay, disabledDate, onChangeTime, onChangeType, onChangeMessage } = props
+const CardSetRoomDetail: VFC<any> = (props) => {
+  const {
+    onChangeTitle,
+    onChangeDay,
+    disabledDate,
+    onChangeTime,
+    onChangeType,
+    onChangeMessage,
+    meetTitle,
+    hostDay,
+    startTime,
+    endTime,
+    meetType,
+    meetMessage,
+  } = props
+
   return (
     <>
       <Form.Item
         name="title"
         label="タイトル"
-        initialValue={'もくもく会'}
+        initialValue={meetTitle}
         rules={[{ required: true, message: 'タイトルを記入して下さい' }]}
       >
-        <Input defaultValue="もくもく会" onChange={onChangeTitle} style={{ width: 150 }} placeholder={'もくもく会'} />
+        <Input defaultValue={meetTitle} onChange={onChangeTitle} style={{ width: 150 }} placeholder={'もくもく会'} />
       </Form.Item>
       <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: '日付を記入して下さい' }]}>
-        <DatePicker format="YYYY-MM-DD" style={{ width: 150 }} onChange={onChangeDay} disabledDate={disabledDate} />
+        <DatePicker
+          defaultValue={moment(`${hostDay[0]}-${hostDay[1] + 1}-${hostDay[2]}`, 'YYYY-MM-DD')}
+          format="YYYY-MM-DD"
+          style={{ width: 150 }}
+          onChange={onChangeDay}
+          disabledDate={disabledDate}
+        />
       </Form.Item>
       <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: '時間を記入して下さい' }]}>
-        <TimePicker.RangePicker format="HH:mm" onChange={onChangeTime} />
+        <TimePicker.RangePicker
+          defaultValue={[
+            moment(`${startTime[3]}:${startTime[4]}`, 'HH:mm'),
+            moment(`${endTime[3]}:${endTime[4]}`, 'HH:mmD'),
+          ]}
+          format="HH:mm"
+          onChange={onChangeTime}
+        />
       </Form.Item>
       <Form.Item name="radio-group" label="カテゴリ" rules={[{ required: true, message: 'Please input type!' }]}>
-        <Select style={{ width: 150 }} onChange={onChangeType}>
+        <Select defaultValue={meetType} style={{ width: 150 }} onChange={onChangeType}>
           <Option value="フロントエンド">フロントエンド</Option>
           <Option value="バックエンド">バックエンド</Option>
           <Option value="インフラ">インフラ</Option>
         </Select>
       </Form.Item>
       <Form.Item name="note" label="コメント" rules={[{ required: true, message: 'コメントを記入して下さい' }]}>
-        <TextArea rows={4} placeholder="今日やること" onChange={onChangeMessage} />
+        <TextArea defaultValue={meetMessage} rows={4} placeholder="今日やること" onChange={onChangeMessage} />
       </Form.Item>
     </>
   )
 }
 
-export default SetRoomDetail
+export default CardSetRoomDetail
