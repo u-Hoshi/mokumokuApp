@@ -13,8 +13,9 @@ const RoomTable: VFC = () => {
     AuthorId: string
     hostDay: number[]
     endTime: number[]
+    meetTitle: string
     meetType: string
-    message: string
+    meetMessage: string
     startTime: number[]
   }
   // TODO anyを取り除く
@@ -107,12 +108,13 @@ const RoomTable: VFC = () => {
                 <RoomCard
                   key={room.id}
                   roomId={room.id}
-                  AuthorId={room.AuthorId}
-                  hostDay={room.hostDay}
-                  startTime={room.startTime}
-                  endTime={room.endTime}
-                  meetType={room.meetType}
-                  message={room.message}
+                  roomAuthorId={room.AuthorId}
+                  roomHostDay={room.hostDay}
+                  roomStartTime={room.startTime}
+                  roomEndTime={room.endTime}
+                  roomMeetTitle={room.meetTitle}
+                  roomMeetType={room.meetType}
+                  roomMeetMessage={room.meetMessage}
                 />
               )
             })
