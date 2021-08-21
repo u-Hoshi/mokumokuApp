@@ -4,6 +4,7 @@ import HeaderLayout from 'components/themplates/HeaderLayout'
 import RoomTable from 'components/themplates/RoomTable'
 import { VFC, useContext } from 'react'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import AddRoom from 'components/orgnisms/AddRoom'
 
 const Room: VFC = () => {
   // TODO ↓をRoomDetailの方に移植する
@@ -18,7 +19,8 @@ const Room: VFC = () => {
           <RoomTable />
         </Col>
         <Col span={6} offset={1}>
-          <RoomDetail user={loginUser} />
+          {/* <RoomDetail user={loginUser} /> */}
+          <AddRoom user={loginUser} />
         </Col>
       </Row>
     </>

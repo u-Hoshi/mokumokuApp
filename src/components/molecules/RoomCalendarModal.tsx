@@ -14,7 +14,7 @@ type room = {
 
 const RoomCalendarModal: VFC<room> = (props) => {
   const { hostDay, startTime, endTime, meetType, message } = props
-  function info() {
+  const info = () => {
     Modal.info({
       // TODO タイトルも決めれるようにする
       title: 'もくもく会',

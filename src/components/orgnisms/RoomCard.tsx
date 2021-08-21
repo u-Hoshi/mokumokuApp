@@ -5,6 +5,8 @@ import { PlusOutlined, SettingOutlined } from '@ant-design/icons'
 const { Meta } = Card
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import moment from 'moment'
+import Modal from 'antd/lib/modal/Modal'
+import RoomDetail from 'components/molecules/RoomDetail'
 
 type room = {
   AuthorId: string
@@ -28,6 +30,7 @@ const RoomCard: VFC<room> = (props) => {
 
   const [authorName, setAuthorName] = useState<string>()
   const [authorIcon, setAuthorIcon] = useState<string>()
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const joinMeeting = () => {
     console.log(loginUser)
@@ -83,6 +86,10 @@ const RoomCard: VFC<room> = (props) => {
     isPastHostDay = true
   }
   const cardColor = isPastHostDay ? 'white' : 'gray'
+
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
   return (
     <>
       <Col span={8}>
@@ -92,11 +99,16 @@ const RoomCard: VFC<room> = (props) => {
             <SettingOutlined
               key="setting"
               onClick={() => {
-                alert('まだ未実装です')
+                showModal()
               }}
             />,
             // TODO 申し込み済みの時は違うアイコンを表示させ、参加取り消しができるようにする
-            <PlusOutlined key="attendance" onClick={() => joinMeeting()} />,
+            <PlusOutlined
+              key="attendance"
+              onClick={() => {
+                joinMeeting()
+              }}
+            />,
           ]}
         >
           <Meta avatar={<Avatar src={authorIcon} />} title="もくもく会" description={authorName} />
@@ -122,6 +134,9 @@ const RoomCard: VFC<room> = (props) => {
             </Col>
           </Row>
         </Card>
+        <Modal title="Basic Modal" visible={isModalVisible}>
+          <RoomDetail></RoomDetail>
+        </Modal>
       </Col>
     </>
   )
