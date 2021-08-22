@@ -1,7 +1,9 @@
 import { auth, db } from '../../firebase/index'
 import { Children, createContext, ReactNode, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import { UserType } from 'types/user'
 
+// export const LoginUserContext = createContext<UserType>({ uid: '', email: '', password: '', displayname: '' })
 type LoginUserContextType = {
   loginUser: any
 }
@@ -25,18 +27,18 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
             .doc(uid)
             .get()
             .then((d) => {
+              // TODO キャストを取り除く
               const data: any = d.data()
               setLoginUser({
                 uid: uid,
                 email: data.email,
                 password: data.password,
                 displayname: data.displayname,
-                imgurl: data.photoURL,
+                imgurl: data?.imgurl,
               })
             })
         }
         fetchUser(uid)
-        console.log(loginUser)
       } else {
         history.push('/login')
       }

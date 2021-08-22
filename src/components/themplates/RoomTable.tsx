@@ -4,22 +4,13 @@ import { useEffect, useState, VFC } from 'react'
 import { Col, Row, Switch, Typography } from 'antd'
 import RoomCalendar from 'components/orgnisms/RoomCalendar'
 import moment from 'moment'
+import { RoomType } from '../../types/room'
 
 const { Text } = Typography
 
 const RoomTable: VFC = () => {
-  type room = {
-    id: string
-    AuthorId: string
-    hostDay: number[]
-    endTime: number[]
-    meetTitle: string
-    meetType: string
-    meetMessage: string
-    startTime: number[]
-  }
   // TODO anyを取り除く
-  const [rooms, setRooms] = useState<any>([])
+  const [rooms, setRooms] = useState<Array<RoomType>>([])
 
   const nowTimeInt =
     moment().toArray()[0] * 100000000 +
@@ -49,7 +40,15 @@ const RoomTable: VFC = () => {
           const rooms = snapshot.docs.map((doc) => {
             return {
               id: doc.id,
-              ...doc.data(),
+              meetTitle: doc.data().meetTitle,
+              Author: doc.data().Author,
+              AuthorId: doc.data().AuthorId,
+              hostDay: doc.data().hostDay,
+              startDayTimeInt: doc.data().startDayTimeInt,
+              startTime: doc.data().startTime,
+              endTime: doc.data().endTime,
+              meetType: doc.data().meetType,
+              meetMessage: doc.data().meetMessage,
             }
           })
           console.log(rooms)
@@ -63,7 +62,15 @@ const RoomTable: VFC = () => {
           const rooms = snapshot.docs.map((doc) => {
             return {
               id: doc.id,
-              ...doc.data(),
+              meetTitle: doc.data().meetTitle,
+              Author: doc.data().Author,
+              AuthorId: doc.data().AuthorId,
+              hostDay: doc.data().hostDay,
+              startDayTimeInt: doc.data().startDayTimeInt,
+              startTime: doc.data().startTime,
+              endTime: doc.data().endTime,
+              meetType: doc.data().meetType,
+              meetMessage: doc.data().meetMessage,
             }
           })
           console.log(rooms)
@@ -103,7 +110,7 @@ const RoomTable: VFC = () => {
       ) : (
         <Row gutter={[8, 40]}>
           {rooms ? (
-            rooms.map((room: room) => {
+            rooms.map((room: RoomType) => {
               return (
                 <RoomCard
                   key={room.id}

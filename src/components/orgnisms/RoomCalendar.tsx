@@ -2,24 +2,19 @@ import { VFC } from 'react'
 import { Calendar } from 'antd'
 import { Moment } from 'moment'
 import RoomCalendarModal from 'components/molecules/RoomCalendarModal'
+import { RoomType } from 'types/room'
 
-type room = {
-  id: string
-  AuthorId: string
-  hostDay: number[]
-  endTime: []
-  meetType: string
-  message: string
-  startTime: []
+type Props = {
+  rooms: RoomType[]
 }
 
-const RoomCalendar: VFC<any> = (props) => {
+const RoomCalendar: VFC<Props> = (props) => {
   const { rooms } = props
-  const getListData = (value: Moment, rooms: []) => {
-    // valueはカレンダーに表示される日数に渡され、毎回実行される(目安35回)
-    // TODO 型指定
+  console.log(rooms)
+  const getListData = (value: Moment, rooms: RoomType[]) => {
+    // valueはカレンダーに表示される日数に渡され、毎回実行される(42日)
     let listData
-    rooms.map((room: room) => {
+    rooms.map((room: RoomType) => {
       if (value.year() === room.hostDay[0]) {
         if (value.month() === room.hostDay[1]) {
           if (value.date() === room.hostDay[2]) {
@@ -31,9 +26,9 @@ const RoomCalendar: VFC<any> = (props) => {
     return listData || []
   }
 
-  const dateCellRender = (value: any) => {
+  const dateCellRender = (value: Moment) => {
     const listData = getListData(value, rooms)
-    return listData.map((item: room) => {
+    return listData.map((item: RoomType) => {
       return (
         <RoomCalendarModal
           id={item.id}
@@ -41,8 +36,9 @@ const RoomCalendar: VFC<any> = (props) => {
           hostDay={item.hostDay}
           startTime={item.startTime}
           endTime={item.endTime}
+          meetTitle={item.meetTitle}
           meetType={item.meetType}
-          message={item.message}
+          meetMessage={item.meetMessage}
         />
       )
     })

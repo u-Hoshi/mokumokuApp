@@ -12,7 +12,7 @@ import { Moment } from 'moment'
 
 const alert = message
 
-type room = {
+type Room = {
   roomAuthorId: string
   roomHostDay: number[]
   roomEndTime: number[]
@@ -23,13 +23,13 @@ type room = {
   roomId: string
 }
 
-type guest = {
-  id: string
+type Guest = {
+  guestId: string
   guestName: string
   guestImg: string
 }
 
-const RoomCard: VFC<room> = (props) => {
+const RoomCard: VFC<Room> = (props) => {
   const {
     roomAuthorId,
     roomHostDay,
@@ -40,21 +40,19 @@ const RoomCard: VFC<room> = (props) => {
     roomStartTime,
     roomId,
   } = props
-  const { loginUser } = useContext(LoginUserContext)
+  const { loginUser } = useContext<any>(LoginUserContext)
+  // モーダルのカード情報を保持
   const [authorName, setAuthorName] = useState<string>()
   const [authorIcon, setAuthorIcon] = useState<string>()
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
-  //
-  const [meetTile, setMeetTitle] = useState<string>(roomMeetTitle)
+  const [meetTitle, setMeetTitle] = useState<string>(roomMeetTitle)
   const [hostDay, setHostDay] = useState<number[]>(roomHostDay)
   const [startTime, setStartTime] = useState<number[]>(roomStartTime)
   const [endTime, setEndTime] = useState<number[]>(roomEndTime)
   const [meetType, setMeetType] = useState<string>(roomMeetType)
   const [meetMessage, setMeetMessage] = useState<string>(roomMeetMessage)
 
-  //
-
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [allGuests, setGuests] = useState<Array<Guest>>([])
   const [form] = Form.useForm()
 
   const joinMeeting = () => {
@@ -73,7 +71,7 @@ const RoomCard: VFC<room> = (props) => {
     .then((doc) => {
       if (doc.exists) {
         setAuthorName(doc.data()?.displayname)
-        setAuthorIcon(doc.data()?.photoURL)
+        setAuthorIcon(doc.data()?.imgurl)
       } else {
         console.log('No such document!')
       }
@@ -82,9 +80,6 @@ const RoomCard: VFC<room> = (props) => {
       console.log('Error getting document:', error)
     })
 
-  // TODO anyを取り除く
-  const [allGuests, setGuests] = useState<any>([])
-
   useEffect(() => {
     db.collection('Group1')
       .doc(roomId)
@@ -92,14 +87,20 @@ const RoomCard: VFC<room> = (props) => {
       .onSnapshot((snapshot) => {
         const Guests = snapshot.docs.map((doc) => {
           return {
-            id: doc.id,
-            ...doc.data(),
+            guestId: doc.id,
+            guestName: doc.data().guestName,
+            guestImg: doc.data().guestImg,
           }
         })
         setGuests(Guests)
       })
   }, [])
 
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+
+  // 開催前か開催後を判断する
   let isPastHostDay = false
   let hostDayInt = 0
   let nowInt = 0
@@ -112,17 +113,13 @@ const RoomCard: VFC<room> = (props) => {
   }
   const cardColor = isPastHostDay ? 'white' : 'gray'
 
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
-
   const handleChange = () => {
     setIsModalVisible(false)
     const startDayTimeInt =
       hostDay[0] * 100000000 + hostDay[1] * 1000000 + hostDay[2] * 10000 + startTime[3] * 100 + startTime[4]
     try {
       db.collection('Group1').doc(roomId).update({
-        meetTitle: meetTile,
+        meetTitle: meetTitle,
         hostDay: hostDay,
         startDayTimeInt: startDayTimeInt,
         startTime: startTime,
@@ -158,20 +155,19 @@ const RoomCard: VFC<room> = (props) => {
   }
 
   const onChangeDay = (day: Moment | null, dateString: string) => {
-    console.log(dateString)
     if (day !== null) {
       setHostDay(day.toArray())
     }
   }
 
-  function disabledDate(current: any) {
+  function disabledDate(current: Moment) {
     return current && current < moment().subtract(1, 'day')
   }
 
   const onChangeTime = (times: RangeValue<Moment>, dateStrings: [string, string]) => {
     if (times !== null) {
-      setStartTime(times![0]!.toArray())
-      setEndTime(times![1]!.toArray())
+      setStartTime(times[0]!.toArray())
+      setEndTime(times[1]!.toArray())
     }
   }
 
@@ -179,7 +175,7 @@ const RoomCard: VFC<room> = (props) => {
     setMeetType(value)
   }
 
-  const onChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeMessage = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMeetMessage(event.target.value)
   }
 
@@ -215,9 +211,10 @@ const RoomCard: VFC<room> = (props) => {
               <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                 <Avatar src={authorIcon} />
                 {allGuests ? (
-                  allGuests.map((guest: guest) => (
-                    <Tooltip key={guest.id} title={guest.guestName} placement="top">
-                      <Avatar src={guest.guestImg} key={guest.id} />
+                  allGuests.map((guest: Guest) => (
+                    <Tooltip key={guest.guestId} title={guest.guestName} placement="top">
+                      <Avatar src={guest.guestImg} key={guest.guestId} />
+                      {/* {console.log(guest)} */}
                     </Tooltip>
                   ))
                 ) : (

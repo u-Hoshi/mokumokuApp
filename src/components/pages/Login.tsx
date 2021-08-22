@@ -12,7 +12,7 @@ const Login: VFC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const history = useHistory()
-  const { loginUser, setLoginUser } = useContext(LoginUserContext)
+  // const { loginUser, setLoginUser } = useContext(LoginUserContext)
   const handleSubmit = () => {
     auth
       .signInWithEmailAndPassword(email, password)

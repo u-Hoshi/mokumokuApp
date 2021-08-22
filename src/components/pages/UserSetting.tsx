@@ -7,14 +7,7 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import { useHistory } from 'react-router'
 import firebase from 'firebase'
 import HeaderLayout from 'components/themplates/HeaderLayout'
-
-// type User = {
-//   email: string
-//   displayname: string
-//   password: string
-//   photoURL: string
-//   uid: string
-// }
+import { UserType } from 'types/user'
 
 const UserSetting: VFC = () => {
   const { loginUser } = useContext(LoginUserContext)
@@ -53,7 +46,7 @@ const UserSetting: VFC = () => {
             })
           }
 
-          user?.updateEmail(`${email}`).catch((error: any) => {
+          user?.updateEmail(`${email}`).catch((error: string) => {
             message.error('変更に失敗しました。時間を空けてから再変更してください。')
             history.push('/')
           })

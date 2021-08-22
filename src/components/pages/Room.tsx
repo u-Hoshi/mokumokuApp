@@ -4,11 +4,10 @@ import RoomTable from 'components/themplates/RoomTable'
 import { VFC, useContext } from 'react'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import AddRoom from 'components/orgnisms/AddRoom'
+import { UserType } from 'types/user'
 
 const Room: VFC = () => {
-  const { loginUser, setLoginUser } = useContext(LoginUserContext)
-  console.log('room')
-  console.log(loginUser)
+  const { loginUser } = useContext(LoginUserContext)
   return (
     <>
       <HeaderLayout />
