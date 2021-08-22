@@ -12,7 +12,7 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 const alert = message
 
 const Signup: VFC = () => {
-  const { loginUser, setLoginUser } = useContext(LoginUserContext)
+  const { loginUser } = useContext<any>(LoginUserContext)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
@@ -79,7 +79,7 @@ const Signup: VFC = () => {
         .then((fireBaseUrl) => {
           db.collection('Users').doc(user.uid).set(
             {
-              photoURL: fireBaseUrl,
+              imgurl: fireBaseUrl,
             },
             { merge: true }
           )

@@ -32,7 +32,7 @@ const SetRoomDetail: VFC<any> = (props) => {
         </Select>
       </Form.Item>
       <Form.Item name="note" label="コメント" rules={[{ required: true, message: 'コメントを記入して下さい' }]}>
-        <TextArea rows={4} placeholder="今日やること" onChange={onChangeMessage} />
+        <TextArea rows={4} placeholder={'今日やること'} onChange={onChangeMessage} />
       </Form.Item>
     </>
   )

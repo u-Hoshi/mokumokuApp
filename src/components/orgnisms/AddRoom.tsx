@@ -21,8 +21,6 @@ const AddRoom: VFC<any> = (props) => {
   const [meetMessage, setMeetMessage] = useState<string>('')
   const [form] = Form.useForm()
 
-  console.log(meetTile)
-  console.log(meetMessage)
   const onFinish = () => {
     const startDayTimeInt =
       hostDay[0] * 100000000 + hostDay[1] * 1000000 + hostDay[2] * 10000 + startTime[3] * 100 + startTime[4]
@@ -69,8 +67,8 @@ const AddRoom: VFC<any> = (props) => {
 
   const onChangeTime = (times: RangeValue<Moment>, dateStrings: [string, string]) => {
     if (times !== null) {
-      setStartTime(times![0]!.toArray())
-      setEndTime(times![1]!.toArray())
+      setStartTime(times[0]!.toArray())
+      setEndTime(times[1]!.toArray())
     }
   }
 
@@ -78,7 +76,7 @@ const AddRoom: VFC<any> = (props) => {
     setMeetType(value)
   }
 
-  const onChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeMessage = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMeetMessage(event.target.value)
   }
 

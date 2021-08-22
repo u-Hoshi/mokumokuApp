@@ -1,12 +1,30 @@
-import { VFC } from 'react'
+import { ChangeEventHandler, VFC } from 'react'
 import { DatePicker, Form, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import TextArea from 'antd/lib/input/TextArea'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
+import { RangeValue } from 'rc-picker/lib/interface.d'
 
 const { Option } = Select
 
-const CardSetRoomDetail: VFC<any> = (props) => {
+type CardSetRoomDetailType = {
+  onChangeTitle: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeDay: (value: Moment | null, dateString: string) => void
+  disabledDate: (date: Moment) => boolean
+  onChangeTime: (values: RangeValue<Moment>, formatString: [string, string]) => void
+  onChangeType: (value: string) => void
+  onChangeMessage: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+  // id: string
+  // AuthorId: string
+  hostDay: number[]
+  endTime: number[]
+  meetTitle: string
+  meetType: string
+  meetMessage: string
+  startTime: number[]
+}
+
+const CardSetRoomDetail: VFC<CardSetRoomDetailType> = (props) => {
   const {
     onChangeTitle,
     onChangeDay,
@@ -59,7 +77,7 @@ const CardSetRoomDetail: VFC<any> = (props) => {
         </Select>
       </Form.Item>
       <Form.Item name="note" label="コメント" rules={[{ required: true, message: 'コメントを記入して下さい' }]}>
-        <TextArea defaultValue={meetMessage} rows={4} placeholder="今日やること" onChange={onChangeMessage} />
+        <TextArea defaultValue={meetMessage} rows={4} placeholder={'今日やること'} onChange={onChangeMessage} />
       </Form.Item>
     </>
   )
