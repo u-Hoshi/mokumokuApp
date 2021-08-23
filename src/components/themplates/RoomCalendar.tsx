@@ -1,7 +1,7 @@
 import { VFC } from 'react'
 import { Calendar } from 'antd'
 import { Moment } from 'moment'
-import RoomCalendarModal from 'components/molecules/RoomCalendarModal'
+import RoomCalendarSquare from 'components/orgnisms/RoomCalendarSquare'
 import { RoomType } from 'types/room'
 
 type Props = {
@@ -18,7 +18,7 @@ const RoomCalendar: VFC<Props> = (props) => {
       if (value.year() === room.hostDay[0]) {
         if (value.month() === room.hostDay[1]) {
           if (value.date() === room.hostDay[2]) {
-            listData = [{ ...room }]
+            listData = [{ key: room.id, ...room }]
           }
         }
       }
@@ -28,17 +28,18 @@ const RoomCalendar: VFC<Props> = (props) => {
 
   const dateCellRender = (value: Moment) => {
     const listData = getListData(value, rooms)
-    return listData.map((item: RoomType) => {
+    return listData.map((room: RoomType) => {
       return (
-        <RoomCalendarModal
-          id={item.id}
-          AuthorId={item.AuthorId}
-          hostDay={item.hostDay}
-          startTime={item.startTime}
-          endTime={item.endTime}
-          meetTitle={item.meetTitle}
-          meetType={item.meetType}
-          meetMessage={item.meetMessage}
+        <RoomCalendarSquare
+          key={room.id}
+          roomId={room.id}
+          roomAuthorId={room.AuthorId}
+          roomHostDay={room.hostDay}
+          roomStartTime={room.startTime}
+          roomEndTime={room.endTime}
+          roomMeetTitle={room.meetTitle}
+          roomMeetType={room.meetType}
+          roomMeetMessage={room.meetMessage}
         />
       )
     })

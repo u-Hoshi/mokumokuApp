@@ -2,14 +2,13 @@ import RoomCard from 'components/orgnisms/RoomCard'
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
 import { Col, Row, Switch, Typography } from 'antd'
-import RoomCalendar from 'components/orgnisms/RoomCalendar'
+import RoomCalendar from 'components/themplates/RoomCalendar'
 import moment from 'moment'
 import { RoomType } from '../../types/room'
 
 const { Text } = Typography
 
 const RoomTable: VFC = () => {
-  // TODO anyを取り除く
   const [rooms, setRooms] = useState<Array<RoomType>>([])
 
   const nowTimeInt =
