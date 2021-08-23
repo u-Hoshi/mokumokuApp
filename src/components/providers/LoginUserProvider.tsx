@@ -22,7 +22,7 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
         const uid = user.uid
         //
         const fetchUser = async (uid: string) => {
-          const user = await db
+          await db
             .collection(`Users`)
             .doc(uid)
             .get()
@@ -43,7 +43,7 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
         history.push('/login')
       }
     })
-  }, [])
+  }, [history])
   console.log(loginUser)
   // 別のProviderで保持するのもアリ
   return <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>{children}</LoginUserContext.Provider>
