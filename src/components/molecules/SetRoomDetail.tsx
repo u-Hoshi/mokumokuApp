@@ -2,8 +2,6 @@ import { VFC } from 'react'
 import { DatePicker, Form, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import TextArea from 'antd/lib/input/TextArea'
-import moment from 'moment'
-
 const { Option } = Select
 
 const SetRoomDetail: VFC<any> = (props) => {

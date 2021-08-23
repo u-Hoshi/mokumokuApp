@@ -1,4 +1,4 @@
-import { ChangeEventHandler, VFC } from 'react'
+import { VFC } from 'react'
 import { DatePicker, Form, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import TextArea from 'antd/lib/input/TextArea'
@@ -14,8 +14,7 @@ type CardSetRoomDetailType = {
   onChangeTime: (values: RangeValue<Moment>, formatString: [string, string]) => void
   onChangeType: (value: string) => void
   onChangeMessage: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
-  // id: string
-  // AuthorId: string
+  isAuthor: boolean
   hostDay: number[]
   endTime: number[]
   meetTitle: string
@@ -32,6 +31,7 @@ const CardSetRoomDetail: VFC<CardSetRoomDetailType> = (props) => {
     onChangeTime,
     onChangeType,
     onChangeMessage,
+    isAuthor,
     meetTitle,
     hostDay,
     startTime,
@@ -48,7 +48,13 @@ const CardSetRoomDetail: VFC<CardSetRoomDetailType> = (props) => {
         initialValue={meetTitle}
         rules={[{ required: true, message: 'タイトルを記入して下さい' }]}
       >
-        <Input defaultValue={meetTitle} onChange={onChangeTitle} style={{ width: 150 }} placeholder={'もくもく会'} />
+        <Input
+          defaultValue={meetTitle}
+          onChange={onChangeTitle}
+          style={{ width: 150 }}
+          placeholder={'もくもく会'}
+          disabled={!isAuthor}
+        />
       </Form.Item>
       <Form.Item name="date-picker" label="開催日" rules={[{ required: true, message: '日付を記入して下さい' }]}>
         <DatePicker
@@ -57,6 +63,7 @@ const CardSetRoomDetail: VFC<CardSetRoomDetailType> = (props) => {
           style={{ width: 150 }}
           onChange={onChangeDay}
           disabledDate={disabledDate}
+          disabled={!isAuthor}
         />
       </Form.Item>
       <Form.Item name="time-picker" label="開催時間" rules={[{ required: true, message: '時間を記入して下さい' }]}>
@@ -67,17 +74,24 @@ const CardSetRoomDetail: VFC<CardSetRoomDetailType> = (props) => {
           ]}
           format="HH:mm"
           onChange={onChangeTime}
+          disabled={!isAuthor}
         />
       </Form.Item>
       <Form.Item name="radio-group" label="カテゴリ" rules={[{ required: true, message: 'Please input type!' }]}>
-        <Select defaultValue={meetType} style={{ width: 150 }} onChange={onChangeType}>
+        <Select defaultValue={meetType} style={{ width: 150 }} onChange={onChangeType} disabled={!isAuthor}>
           <Option value="フロントエンド">フロントエンド</Option>
           <Option value="バックエンド">バックエンド</Option>
           <Option value="インフラ">インフラ</Option>
         </Select>
       </Form.Item>
       <Form.Item name="note" label="コメント" rules={[{ required: true, message: 'コメントを記入して下さい' }]}>
-        <TextArea defaultValue={meetMessage} rows={4} placeholder={'今日やること'} onChange={onChangeMessage} />
+        <TextArea
+          defaultValue={meetMessage}
+          rows={4}
+          placeholder={'今日やること'}
+          onChange={onChangeMessage}
+          disabled={!isAuthor}
+        />
       </Form.Item>
     </>
   )

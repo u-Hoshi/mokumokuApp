@@ -27,7 +27,6 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
             .doc(uid)
             .get()
             .then((d) => {
-              // TODO キャストを取り除く
               const data: any = d.data()
               setLoginUser({
                 uid: uid,
