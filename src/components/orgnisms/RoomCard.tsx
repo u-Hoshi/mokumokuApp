@@ -4,26 +4,11 @@ import { PlusOutlined, SettingOutlined, MinusOutlined } from '@ant-design/icons'
 import Modal from 'antd/lib/modal/Modal'
 import CardSetRoomDetail from 'components/molecules/CardSetRoomDetail'
 import { useEditRoom } from 'components/hooks/useEditRoom'
+import { GuestType } from 'types/guest'
+import { EditRoomType } from 'types/editroom'
 const { Meta } = Card
 
-type Room = {
-  roomAuthorId: string
-  roomHostDay: number[]
-  roomEndTime: number[]
-  roomMeetTitle: string
-  roomMeetType: string
-  roomMeetMessage: string
-  roomStartTime: number[]
-  roomId: string
-}
-
-type Guest = {
-  guestId: string
-  guestName: string
-  guestImg: string
-}
-
-const RoomCard: VFC<Room> = (props) => {
+const RoomCard: VFC<EditRoomType> = (props) => {
   const {
     roomAuthorId,
     roomHostDay,
@@ -99,7 +84,7 @@ const RoomCard: VFC<Room> = (props) => {
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
                   {guests ? (
-                    guests.map((guest: Guest) => (
+                    guests.map((guest: GuestType) => (
                       <Tooltip key={guest.guestId} title={guest.guestName} placement="top">
                         <Avatar src={guest.guestImg} key={guest.guestId} />
                       </Tooltip>
@@ -140,7 +125,7 @@ const RoomCard: VFC<Room> = (props) => {
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
                   {guests ? (
-                    guests.map((guest: Guest) => (
+                    guests.map((guest: GuestType) => (
                       <Tooltip key={guest.guestId} title={guest.guestName} placement="top">
                         <Avatar src={guest.guestImg} key={guest.guestId} />
                       </Tooltip>

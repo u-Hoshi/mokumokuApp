@@ -4,6 +4,7 @@ import { db } from '../../firebase/index'
 import { useContext, useEffect, useState } from 'react'
 import { Form, message } from 'antd'
 import moment, { Moment } from 'moment'
+import { GuestType } from 'types/guest'
 
 const alert = message
 
@@ -45,7 +46,7 @@ export const useEditRoom = (
   const [meetMessage, setMeetMessage] = useState<string>(roomMeetMessage)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [guests, setGuests] = useState<Array<Guest>>([])
+  const [guests, setGuests] = useState<Array<GuestType>>([])
   const [form] = Form.useForm()
 
   // 参加判定

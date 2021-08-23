@@ -3,25 +3,9 @@ import { Form, Button } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import CardSetRoomDetail from 'components/molecules/CardSetRoomDetail'
 import { useEditRoom } from 'components/hooks/useEditRoom'
+import { EditRoomType } from 'types/editroom'
 
-type Room = {
-  roomAuthorId: string
-  roomHostDay: number[]
-  roomEndTime: number[]
-  roomMeetTitle: string
-  roomMeetType: string
-  roomMeetMessage: string
-  roomStartTime: number[]
-  roomId: string
-}
-
-type Guest = {
-  guestId: string
-  guestName: string
-  guestImg: string
-}
-
-const RoomCalendarSquare: VFC<Room> = (props) => {
+const RoomCalendarSquare: VFC<EditRoomType> = (props) => {
   const {
     roomAuthorId,
     roomHostDay,

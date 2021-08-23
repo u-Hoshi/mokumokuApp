@@ -1,4 +1,4 @@
-import { ChangeEventHandler, VFC } from 'react'
+import { VFC } from 'react'
 import { DatePicker, Form, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import TextArea from 'antd/lib/input/TextArea'
@@ -14,8 +14,6 @@ type CardSetRoomDetailType = {
   onChangeTime: (values: RangeValue<Moment>, formatString: [string, string]) => void
   onChangeType: (value: string) => void
   onChangeMessage: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
-  // id: string
-  // AuthorId: string
   isAuthor: boolean
   hostDay: number[]
   endTime: number[]
