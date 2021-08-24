@@ -28,13 +28,15 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
             .get()
             .then((d) => {
               const data: any = d.data()
-              setLoginUser({
-                uid: uid,
-                email: data.email,
-                password: data.password,
-                displayname: data.displayname,
-                imgurl: data?.imgurl,
-              })
+              if (d.data !== undefined) {
+                setLoginUser({
+                  uid: uid,
+                  email: data.email,
+                  password: data.password,
+                  displayname: data.displayname,
+                  imgurl: data.imgurl,
+                })
+              }
             })
         }
         fetchUser(uid)
@@ -42,7 +44,8 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
         history.push('/login')
       }
     })
-  }, [history])
+  }, [])
+  history
   console.log(loginUser)
   // 別のProviderで保持するのもアリ
   return <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>{children}</LoginUserContext.Provider>

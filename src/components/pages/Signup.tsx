@@ -12,24 +12,19 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 const alert = message
 
 const Signup: VFC = () => {
-  const { loginUser } = useContext<any>(LoginUserContext)
+  const { loginUser, setLoginUser } = useContext<any>(LoginUserContext)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'success',
-    },
-  ])
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([])
   const history = useHistory()
   const handleSubmit = useCallback(() => {
     console.log('email' + email)
     console.log('password' + password)
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then(async (result) => {
+        console.log('foo')
         const user = result.user
         history.push('/')
         if (user) {
@@ -41,11 +36,40 @@ const Signup: VFC = () => {
             displayname: userName,
             email: email,
           }
-
-          db.collection('Users').doc(uid).set(userInfo)
+          await db.collection('Users').doc(uid).set(userInfo)
           // アイコンの保存
-          saveImg(user)
+          if (fileList[0]) {
+            saveImg(user)
+          } else {
+            db.collection('Users').doc(uid).set(
+              {
+                imgurl: '',
+              },
+              { merge: true }
+            )
+          }
+          console.log('bar')
+          await db
+            .collection(`Users`)
+            .doc(uid)
+            .get()
+            .then((d) => {
+              console.log(d)
+              console.log(d.data)
+              const data: any = d.data()
+              if (d.data !== undefined) {
+                setLoginUser({
+                  uid: uid,
+                  email: data.email,
+                  password: data.password,
+                  displayname: data.displayname,
+                  imgurl: data.imgurl,
+                })
+              }
+              console.log('num')
+            })
         }
+        console.log('hoge')
       })
       .catch((err) => {
         if (err.toString() == '[firebase_auth/invalid-email] The email address is badly formatted.') {
@@ -89,7 +113,6 @@ const Signup: VFC = () => {
   )
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-
   const onFileChange = useCallback(
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
