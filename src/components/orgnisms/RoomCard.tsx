@@ -54,7 +54,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
 
   return (
     <>
-      <Col span={8}>
+      <Col span={8} md={10} lg={10} xl={8} xxl={6}>
         {isJoin ? (
           <Card
             style={{ backgroundColor: `${cardColor}` }}
@@ -77,9 +77,11 @@ const RoomCard: VFC<EditRoomType> = (props) => {
             <h3>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
             <h3>{`${roomStartTime[3]}時${roomStartTime[4]}分から${roomEndTime[3]}時${roomEndTime[4]}分まで`}</h3>
             <h4>{roomMeetType}</h4>
-            <h4>{roomMeetMessage}</h4>
             <Row>
-              <Col offset={18}>
+              <Col flex="1 1" style={{ overflow: 'hidden', wordWrap: 'break-word', height: '82px' }}>
+                {roomMeetMessage}
+              </Col>
+              <Col flex="50px">
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
@@ -118,9 +120,11 @@ const RoomCard: VFC<EditRoomType> = (props) => {
             <h3>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
             <h3>{`${roomStartTime[3]}時${roomStartTime[4]}分から${roomEndTime[3]}時${roomEndTime[4]}分まで`}</h3>
             <h4>{roomMeetType}</h4>
-            <h4>{roomMeetMessage}</h4>
             <Row>
-              <Col offset={18}>
+              <Col flex="1 1" style={{ overflow: 'hidden', wordWrap: 'break-word', height: '82px' }}>
+                {roomMeetMessage}
+              </Col>
+              <Col flex="50px">
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
