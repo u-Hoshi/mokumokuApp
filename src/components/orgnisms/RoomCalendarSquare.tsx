@@ -51,7 +51,11 @@ const RoomCalendarSquare: VFC<EditRoomType> = (props) => {
       <Button
         block
         size="small"
-        style={{ borderColor: '#1890FF' }}
+        style={{
+          borderColor: '#1890FF',
+          overflow: 'hidden',
+          // width: '100px',
+        }}
         onClick={() => {
           showModal()
         }}
