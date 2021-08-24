@@ -10,7 +10,7 @@ DemoURL：https://staging-mekumoku.netlify.app/
 
 ## きっかけ
 
-インターン先で使われている技術をキャッチアップするために個人開発をしようと考えました。
+インターン先で使われている技術の知識をさらに深く身につけたいと思い個人開発をしようと考えました。
 
 その題材で誰かの課題を解決したいと思い色んな人にヒアリングをしました。その中で CTO と話した際に出てきた
 **「もくもく会を開いた時って誰来てくれるか不安だよね」**
@@ -26,7 +26,7 @@ DemoURL：https://staging-mekumoku.netlify.app/
 
 ## 使い方
 
-### トップページ
+### トップページ (カード表示)
 
 <img width="1431" alt="top" src="https://user-images.githubusercontent.com/56116874/130394777-18228d94-9b29-4518-98e2-68d32f07e17a.png">
 
@@ -35,6 +35,16 @@ DemoURL：https://staging-mekumoku.netlify.app/
 左側の ⚙ でスケジュールの変更ができます(開催者のみ)
 
 ➕ で参加表明、➖ で参加取り消しすることができます。
+
+### カレンダー表示
+
+<img width="1440" alt="スクリーンショット 2021-08-24 7 34 16" src="https://user-images.githubusercontent.com/56116874/130528276-254cd662-e99d-4fec-a7fe-7ff0c7672954.png">
+
+カレンダー内の文字をクリックすると、会の編集もしくは参加表明、参加取り消しができます。
+
+![2](https://user-images.githubusercontent.com/56116874/130528281-3a707121-f9e2-4692-9810-ac348e0a36c3.png)
+
+左が参加表明済みの人の表示、右が開催者の人の表示です。
 
 ## 使用技術
 
