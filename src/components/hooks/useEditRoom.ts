@@ -129,8 +129,18 @@ export const useEditRoom = (
   let nowInt = 0
 
   // 時間を数字で変換して判断する
-  hostDayInt = roomHostDay[0] * 10000 + roomHostDay[1] * 100 + roomHostDay[2]
-  nowInt = moment().toArray()[0] * 10000 + moment().toArray()[1] * 100 + moment().toArray()[2]
+  hostDayInt =
+    roomHostDay[0] * 100000000 +
+    roomHostDay[1] * 1000000 +
+    roomHostDay[2] * 10000 +
+    roomStartTime[3] * 100 +
+    roomStartTime[4]
+  nowInt =
+    moment().toArray()[0] * 100000000 +
+    moment().toArray()[1] * 1000000 +
+    moment().toArray()[2] * 10000 +
+    moment().toArray()[3] * 100 +
+    moment().toArray()[4]
 
   if (hostDayInt >= nowInt) {
     isPastHostDay = true

@@ -213,7 +213,7 @@ const Signup: VFC = () => {
               />
             </Form.Item>
             <Form.Item
-              label="icon"
+              label="icon(jpgのみ)"
               name="file"
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
