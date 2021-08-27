@@ -1,10 +1,11 @@
 import RoomCard from 'components/orgnisms/RoomCard'
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
-import { Col, Row, Switch, Typography } from 'antd'
+import { Col, Radio, RadioChangeEvent, Row, Select, Switch, Typography } from 'antd'
 import RoomCalendar from 'components/themplates/RoomCalendar'
 import moment from 'moment'
 import { RoomType } from '../../types/room'
+import { Option } from 'antd/lib/mentions'
 
 const { Text } = Typography
 
@@ -24,30 +25,40 @@ const RoomTable: VFC = () => {
   }
 
   const [cardSort, setCardSort] = useState(true)
-
-  const onChangeSort = () => {
-    setCardSort(!cardSort)
+  const [cardSortType, setCardSortType] = useState<string[]>(['フロントエンド', 'バックエンド', 'インフラ'])
+  const onChangeType = (value: string) => {
+    const initialcardSortType = ['フロントエンド', 'バックエンド', 'インフラ']
+    if (value === '全て') {
+      setCardSortType(initialcardSortType.filter((cardSortType: string) => cardSortType !== value))
+    } else {
+      setCardSortType(initialcardSortType.filter((cardSortType: string) => cardSortType === value))
+    }
   }
-
+  const onChangeSort = (e: RadioChangeEvent) => {
+    setCardSort(!e)
+  }
+  console.log(cardSortType)
   // 全ルームの情報を取得取得
   useEffect(() => {
     if (cardSort) {
       db.collection('Group1')
         .orderBy('startDayTimeInt', 'asc')
         .where('startDayTimeInt', '>', nowTimeInt)
+        .where('meetType', 'in', cardSortType)
         .onSnapshot((snapshot) => {
           const rooms = snapshot.docs.map((doc) => {
+            const data = doc.data()
             return {
               id: doc.id,
-              meetTitle: doc.data().meetTitle,
-              Author: doc.data().Author,
-              AuthorId: doc.data().AuthorId,
-              hostDay: doc.data().hostDay,
-              startDayTimeInt: doc.data().startDayTimeInt,
-              startTime: doc.data().startTime,
-              endTime: doc.data().endTime,
-              meetType: doc.data().meetType,
-              meetMessage: doc.data().meetMessage,
+              meetTitle: data.meetTitle,
+              Author: data.Author,
+              AuthorId: data.AuthorId,
+              hostDay: data.hostDay,
+              startDayTimeInt: data.startDayTimeInt,
+              startTime: data.startTime,
+              endTime: data.endTime,
+              meetType: data.meetType,
+              meetMessage: data.meetMessage,
             }
           })
           console.log(rooms)
@@ -57,19 +68,21 @@ const RoomTable: VFC = () => {
     } else {
       db.collection('Group1')
         .orderBy('createdAt', 'desc')
+        .where('meetType', 'in', cardSortType)
         .onSnapshot((snapshot) => {
           const rooms = snapshot.docs.map((doc) => {
+            const data = doc.data()
             return {
               id: doc.id,
-              meetTitle: doc.data().meetTitle,
-              Author: doc.data().Author,
-              AuthorId: doc.data().AuthorId,
-              hostDay: doc.data().hostDay,
-              startDayTimeInt: doc.data().startDayTimeInt,
-              startTime: doc.data().startTime,
-              endTime: doc.data().endTime,
-              meetType: doc.data().meetType,
-              meetMessage: doc.data().meetMessage,
+              meetTitle: data.meetTitle,
+              Author: data.Author,
+              AuthorId: data.AuthorId,
+              hostDay: data.hostDay,
+              startDayTimeInt: data.startDayTimeInt,
+              startTime: data.startTime,
+              endTime: data.endTime,
+              meetType: data.meetType,
+              meetMessage: data.meetMessage,
             }
           })
           console.log(rooms)
@@ -77,30 +90,30 @@ const RoomTable: VFC = () => {
           setRooms(rooms)
         })
     }
-  }, [cardSort])
+  }, [cardSort, cardSortType])
 
   return (
     <>
       <Col offset={1} span={14} style={{ paddingBottom: '14px' }}>
-        <Text>表示切り替え：</Text>
-        <Switch
-          style={{ display: 'inline' }}
-          checkedChildren="カレンダー"
-          unCheckedChildren="カード"
-          onChange={onChangeDisplay}
-        />
+        <Text>表示の切り替え：</Text>
+        <Radio.Group onChange={onChangeDisplay} defaultValue={1}>
+          <Radio value={1}>カード</Radio>
+          <Radio value={2}>カレンダー</Radio>
+        </Radio.Group>
         {isDisplay || (
           <>
-            <Text style={{ paddingLeft: '14px' }}>カードの並び順：</Text>
-            <Switch
-              defaultChecked
-              checkedChildren="開催日に近い順"
-              unCheckedChildren="作成日順"
-              onChange={onChangeSort}
-              style={{
-                display: 'inline',
-              }}
-            />
+            <Text style={{ paddingLeft: '8px' }}>表示切り替え：</Text>
+            <Select style={{ width: 150 }} onChange={(e) => onChangeType(e)} defaultValue={'全て'}>
+              <Option value="全て">全て</Option>
+              <Option value="フロントエンド">フロントエンド</Option>
+              <Option value="バックエンド">バックエンド</Option>
+              <Option value="インフラ">インフラ</Option>
+            </Select>
+            <Text>カードの並び順：</Text>
+            <Radio.Group onChange={(e) => onChangeSort(e)} defaultValue={1}>
+              <Radio value={1}>開催日に近い順</Radio>
+              <Radio value={2}>作成日順</Radio>
+            </Radio.Group>
           </>
         )}
       </Col>
