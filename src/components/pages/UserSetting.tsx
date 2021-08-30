@@ -1,27 +1,31 @@
-import { Form, Input, Row, Col, message } from 'antd'
+import { Form, Input, Row, Col, message, Tabs, Upload } from 'antd'
 import { useCallback, useContext, useEffect, useState, VFC } from 'react'
 import { useParams } from 'react-router-dom'
 import PrimaryButton from 'components/atoms/PrimaryButton'
-import { auth, db } from '../../firebase/index'
+import { auth, db, storage } from '../../firebase/index'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import { useHistory } from 'react-router'
 import firebase from 'firebase'
 import HeaderLayout from 'components/themplates/HeaderLayout'
 import { UserType } from 'types/user'
+import ImgCrop from 'antd-img-crop'
+import { UploadFile } from 'antd/lib/upload/interface'
+
+const { TabPane } = Tabs
 
 const UserSetting: VFC = () => {
-  const { loginUser } = useContext(LoginUserContext)
+  const { loginUser, setLoginUser } = useContext(LoginUserContext)
   const { id } = useParams<{ id: string }>()
   const [userInfo, setUserInfo] = useState<any>()
   const [userName, setUserName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [userMemo, setUserMemo] = useState<string>('')
   const history = useHistory()
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([])
 
   const fetchUser = async (id: string) => {
     const document = await db.doc(`Users/${id}`).get()
     console.log(document.data()?.email)
-
     return document.data()
   }
   useEffect(() => {
@@ -61,55 +65,197 @@ const UserSetting: VFC = () => {
     [email, userName, userMemo]
   )
 
+  function callback(key: string) {
+    // console.log(key)
+  }
+
+  const changeIcon = useCallback(() => {
+    console.log('foo')
+
+    history.push('/')
+
+    // アイコンの保存
+    if (fileList[0]) {
+      saveImg(loginUser)
+    } else {
+      db.collection('Users').doc(loginUser.uid).set(
+        {
+          imgurl: '',
+        },
+        { merge: true }
+      )
+    }
+    console.log('bar')
+    db.collection(`Users`)
+      .doc(loginUser.uid)
+      .get()
+      .then((d) => {
+        console.log(d)
+        console.log(d.data)
+        const data: any = d.data()
+        if (d.data !== undefined) {
+          setLoginUser({
+            imgurl: data.imgurl,
+          })
+        }
+        console.log('num')
+
+        console.log('hoge')
+      })
+      .catch((err) => {
+        if (err.toString() == '[firebase_auth/invalid-email] The email address is badly formatted.') {
+          return 'error:email'
+        }
+        console.log('err' + err)
+        console.log('サインアップ失敗です')
+      })
+    console.log('last')
+  }, [fileList])
+
+  const saveImg = useCallback(
+    async (loginUser) => {
+      const imageName = fileList[0]
+      console.log(imageName)
+
+      const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+      const N = 16
+      const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N)))
+        .map((n) => S[n % S.length])
+        .join('')
+      // TODO ts-ignoreを取り除く
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
+      console.log(imageName)
+      storage
+        .ref(`images`)
+        .child(fileName)
+        .getDownloadURL()
+        .then((fireBaseUrl) => {
+          db.collection('Users').doc(loginUser.uid).set(
+            {
+              imgurl: fireBaseUrl,
+            },
+            { merge: true }
+          )
+        })
+    },
+    [fileList[0]]
+  )
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const onFileChange = useCallback(
+    async ({ fileList: newFileList }) => {
+      await setFileList(newFileList)
+      console.log(fileList[0]?.status)
+      if (fileList[0]?.status === 'error') {
+        console.log('done')
+      }
+      // if (newFileList.file.status === 'done') {
+      //   message.success(`${newFileList.file.name} file uploaded successfully`)
+      // } else if (newFileList.file.status === 'error') {
+      //   message.error(`${newFileList.file.name} file upload failed.`)
+      // }
+    },
+    [fileList[0]]
+  )
+  console.log(fileList)
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const previewImg = async (file) => {
+    let src = file.url
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj)
+        reader.onload = () => resolve(reader.result)
+      })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const image = new Image()
+    image.src = src
+    const imgWindow = window.open(src)
+    console.log(src)
+    if (imgWindow !== null) {
+      imgWindow.document.write(image.outerHTML)
+    }
+  }
+
   return (
     <>
       <HeaderLayout />
+      <h1>ユーザ設定</h1>
       <Row justify="center">
-        <Col span={10}>
-          <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
-              style={{ flexDirection: 'column' }}
-              labelAlign={'left'}
-            >
-              <Input
-                onChange={(e) => {
-                  setUserName(e.target.value)
-                }}
-              />
-            </Form.Item>
-            <p>{userInfo?.email}</p>
-            <Form.Item
-              label="email"
-              name="email"
-              rules={[
-                {
-                  type: 'email',
-                  message: 'The input is not valid E-mail!',
-                },
-                { required: true, message: 'Please input your email!' },
-              ]}
-              style={{ flexDirection: 'column' }}
-              labelAlign={'left'}
-            >
-              <Input
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                }}
-              />
-            </Form.Item>
-            <Form.Item label="自己紹介" name="自己紹介" style={{ flexDirection: 'column' }} labelAlign={'left'}>
-              <Input.TextArea
-                onChange={(e) => {
-                  setUserMemo(e.target.value)
-                }}
-              />
-            </Form.Item>
-            <PrimaryButton>更新</PrimaryButton>
-          </Form>
-        </Col>
+        <Tabs defaultActiveKey="1" onChange={callback} style={{ width: '50%' }}>
+          <TabPane tab="プロフィール設定" key="1">
+            <Col>
+              <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[{ required: true, message: 'Please input your username!' }]}
+                  style={{ flexDirection: 'column' }}
+                  labelAlign={'left'}
+                >
+                  <Input
+                    onChange={(e) => {
+                      setUserName(e.target.value)
+                    }}
+                  />
+                </Form.Item>
+                <p>{userInfo?.email}</p>
+                <Form.Item
+                  label="email"
+                  name="email"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
+                    { required: true, message: 'Please input your email!' },
+                  ]}
+                  style={{ flexDirection: 'column' }}
+                  labelAlign={'left'}
+                >
+                  <Input
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                    }}
+                  />
+                </Form.Item>
+                <Form.Item label="自己紹介" name="自己紹介" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+                  <Input.TextArea
+                    onChange={(e) => {
+                      setUserMemo(e.target.value)
+                    }}
+                  />
+                </Form.Item>
+                <PrimaryButton>更新</PrimaryButton>
+              </Form>
+            </Col>
+          </TabPane>
+          <TabPane tab="プロフィール画像" key="2">
+            <Form onFinish={changeIcon}>
+              <Form.Item label="icon(jpgのみ)" name="file" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+                <ImgCrop rotate>
+                  <Upload
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onFileChange}
+                    onPreview={previewImg}
+                  >
+                    {fileList.length < 1 && 'Upload'}
+                  </Upload>
+                </ImgCrop>
+              </Form.Item>
+              <PrimaryButton>更新</PrimaryButton>`
+            </Form>
+          </TabPane>
+        </Tabs>
       </Row>
     </>
   )
