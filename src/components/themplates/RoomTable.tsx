@@ -94,7 +94,7 @@ const RoomTable: VFC = () => {
 
   return (
     <>
-      <Col offset={1} span={14} style={{ paddingBottom: '14px' }}>
+      <Col offset={1} style={{ paddingBottom: '14px', maxWidth: '564px' }}>
         <Text>表示の切り替え：</Text>
         <Radio.Group onChange={onChangeDisplay} defaultValue={1}>
           <Radio value={1}>カード</Radio>
