@@ -10,6 +10,7 @@ import HeaderLayout from 'components/themplates/HeaderLayout'
 import { UserType } from 'types/user'
 import ImgCrop from 'antd-img-crop'
 import { UploadFile } from 'antd/lib/upload/interface'
+import SecondaryButton from 'components/atoms/SecondaryButton'
 
 const { TabPane } = Tabs
 
@@ -103,13 +104,8 @@ const UserSetting: VFC = () => {
         console.log('hoge')
       })
       .catch((err) => {
-        if (err.toString() == '[firebase_auth/invalid-email] The email address is badly formatted.') {
-          return 'error:email'
-        }
         console.log('err' + err)
-        console.log('サインアップ失敗です')
       })
-    console.log('last')
   }, [fileList])
 
   const saveImg = useCallback(
@@ -184,6 +180,36 @@ const UserSetting: VFC = () => {
     }
   }
 
+  const onClickDelete = () => {
+    db.collection('Users').doc(loginUser.uid).set(
+      {
+        imgurl: '',
+      },
+      { merge: true }
+    )
+
+    console.log('bar')
+    db.collection(`Users`)
+      .doc(loginUser.uid)
+      .get()
+      .then((d) => {
+        console.log(d)
+        console.log(d.data)
+        const data: any = d.data()
+        if (d.data !== undefined) {
+          setLoginUser({
+            imgurl: data.imgurl,
+          })
+        }
+        message.success('削除に成功しました')
+        history.push('/')
+      })
+      .catch((error) => {
+        message.error('削除に失敗しました。時間を空けてから再削除してください。')
+        history.push('/')
+      })
+  }
+
   return (
     <>
       <HeaderLayout />
@@ -252,8 +278,11 @@ const UserSetting: VFC = () => {
                   </Upload>
                 </ImgCrop>
               </Form.Item>
-              <PrimaryButton>更新</PrimaryButton>`
+              <PrimaryButton>更新</PrimaryButton>
             </Form>
+            <SecondaryButton onClick={() => onClickDelete()} style={{ marginTop: '10px' }}>
+              現在の画像を削除
+            </SecondaryButton>
           </TabPane>
         </Tabs>
       </Row>
