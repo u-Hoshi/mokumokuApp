@@ -1,4 +1,4 @@
-import { ReactNode, VFC } from 'react'
+import { VFC } from 'react'
 import { Button } from 'antd'
 
 const PrimaryButton: VFC<{ children: string; style?: { [key: string]: string } }> = (props) => {

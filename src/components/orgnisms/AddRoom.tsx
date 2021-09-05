@@ -61,7 +61,7 @@ const AddRoom: VFC<any> = (props) => {
     }
   }
 
-  function disabledDate(current: any) {
+  const disabledDate = (current: Moment) => {
     return current && current < dayjs().subtract(1, 'day')
   }
 
