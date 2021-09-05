@@ -34,12 +34,12 @@ const RoomTable: VFC = () => {
       setCardSortType(initialcardSortType.filter((cardSortType: string) => cardSortType === value))
     }
   }
-  const onChangeSort = (e: RadioChangeEvent) => {
-    setCardSort(!e)
+  const onChangeSort = () => {
+    setCardSort(!cardSort)
   }
-  console.log(cardSortType)
   // 全ルームの情報を取得取得
   useEffect(() => {
+    console.log(cardSort)
     if (cardSort) {
       db.collection('Group1')
         .orderBy('startDayTimeInt', 'asc')
@@ -61,13 +61,12 @@ const RoomTable: VFC = () => {
               meetMessage: data.meetMessage,
             }
           })
-          console.log(rooms)
-          // ↑では[{}]だが↓では[object object]の形で代入される
           setRooms(rooms)
         })
     } else {
       db.collection('Group1')
-        .orderBy('createdAt', 'desc')
+        .orderBy('startDayTimeInt', 'desc')
+        .where('startDayTimeInt', '<', nowTimeInt)
         .where('meetType', 'in', cardSortType)
         .onSnapshot((snapshot) => {
           const rooms = snapshot.docs.map((doc) => {
@@ -85,8 +84,6 @@ const RoomTable: VFC = () => {
               meetMessage: data.meetMessage,
             }
           })
-          console.log(rooms)
-          // ↑では[{}]だが↓では[object object]の形で代入される
           setRooms(rooms)
         })
     }
@@ -94,7 +91,7 @@ const RoomTable: VFC = () => {
 
   return (
     <>
-      <Col offset={1} style={{ paddingBottom: '14px', maxWidth: '564px' }}>
+      <Col offset={1} style={{ paddingBottom: '14px', maxWidth: '540px' }}>
         <Text>表示の切り替え：</Text>
         <Radio.Group onChange={onChangeDisplay} defaultValue={1}>
           <Radio value={1}>カード</Radio>
@@ -102,17 +99,17 @@ const RoomTable: VFC = () => {
         </Radio.Group>
         {isDisplay || (
           <>
-            <Text style={{ paddingLeft: '8px' }}>表示切り替え：</Text>
+            <Text style={{ paddingLeft: '8px' }}>カテゴリ：</Text>
             <Select style={{ width: 150 }} onChange={(e) => onChangeType(e)} defaultValue={'全て'}>
               <Option value="全て">全て</Option>
               <Option value="フロントエンド">フロントエンド</Option>
               <Option value="バックエンド">バックエンド</Option>
               <Option value="インフラ">インフラ</Option>
             </Select>
-            <Text>カードの並び順：</Text>
-            <Radio.Group onChange={(e) => onChangeSort(e)} defaultValue={1}>
-              <Radio value={1}>開催日に近い順</Radio>
-              <Radio value={2}>作成日順</Radio>
+            <Text>種類：</Text>
+            <Radio.Group onChange={onChangeSort} defaultValue={1}>
+              <Radio value={1}>開催予定</Radio>
+              <Radio value={2}>開催済み</Radio>
             </Radio.Group>
           </>
         )}
