@@ -2,7 +2,7 @@ import { RangeValue } from 'rc-picker/lib/interface.d'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import { db } from '../../firebase/index'
 import { useContext, useEffect, useState } from 'react'
-import { Form, message } from 'antd'
+import { Form, FormInstance, message } from 'antd'
 import moment, { Moment } from 'moment'
 import { GuestType } from 'types/guest'
 
@@ -34,7 +34,30 @@ export const useEditRoom = (
   roomMeetMessage: string,
   roomStartTime: number[],
   roomId: string
-) => {
+): {
+  joinMeeting: () => void
+  cancelJoinMeeting: () => void
+  showModal: () => void
+  handleChange: () => void
+  handleDelete: () => void
+  handleCancel: () => void
+  onChangeTitle: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeDay: (day: Moment | null, dateString: string) => void
+  disabledDate: (current: Moment) => boolean
+  onChangeTime: (times: RangeValue<Moment>, dateStrings: [string, string]) => void
+  onChangeType: (value: string) => void
+  onChangeMessage: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+  loginUser: string
+  meetTitle: string
+  isModalVisible: boolean
+  form: FormInstance<any>
+  isJoin: boolean
+  isAuthor: boolean
+  guests: GuestType[]
+  authorIcon: string | undefined
+  authorName: string | undefined
+  cardColor: string
+} => {
   const { loginUser } = useContext<any>(LoginUserContext)
   const [authorName, setAuthorName] = useState<string>()
   const [authorIcon, setAuthorIcon] = useState<string>()
@@ -53,11 +76,15 @@ export const useEditRoom = (
   const [participant, setParticipant] = useState<Array<string>>([])
   const [isJoin, setIsJoin] = useState(false)
   const joinMeeting = () => {
-    db.collection('Group1').doc(roomId).collection('guests').doc(loginUser.uid).set({
-      guestId: loginUser.uid,
-      guestName: loginUser.displayname,
-      guestImg: loginUser?.imgurl,
-    })
+    if (loginUser.uid !== roomAuthorId) {
+      db.collection('Group1').doc(roomId).collection('guests').doc(loginUser.uid).set({
+        guestId: loginUser.uid,
+        guestName: loginUser.displayname,
+        guestImg: loginUser?.imgurl,
+      })
+    } else {
+      message.error('開催者のため参加表明ができません')
+    }
   }
 
   const cancelJoinMeeting = () => {

@@ -51,7 +51,6 @@ const RoomCard: VFC<EditRoomType> = (props) => {
     roomStartTime,
     roomId
   )
-
   return (
     <>
       <Col span={8} md={10} lg={10} xl={8} xxl={6}>
