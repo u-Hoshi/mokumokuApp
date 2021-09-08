@@ -79,8 +79,6 @@ export const useEditRoom = (
     if (loginUser.uid !== roomAuthorId) {
       db.collection('Group1').doc(roomId).collection('guests').doc(loginUser.uid).set({
         guestId: loginUser.uid,
-        guestName: loginUser.displayname,
-        guestImg: loginUser?.imgurl,
       })
     } else {
       message.error('開催者のため参加表明ができません')
@@ -138,8 +136,6 @@ export const useEditRoom = (
           setParticipant(arrParticipant)
           return {
             guestId: doc.id,
-            guestName: doc.data().guestName,
-            guestImg: doc.data().guestImg,
           }
         })
         setGuests(Guests)
