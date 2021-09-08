@@ -6,6 +6,7 @@ import CardSetRoomDetail from 'components/molecules/CardSetRoomDetail'
 import { useEditRoom } from 'components/hooks/useEditRoom'
 import { GuestType } from 'types/guest'
 import { EditRoomType } from 'types/editroom'
+import GuestMember from 'components/molecules/GuestMenber'
 const { Meta } = Card
 
 const RoomCard: VFC<EditRoomType> = (props) => {
@@ -84,15 +85,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
-                  {guests ? (
-                    guests.map((guest: GuestType) => (
-                      <Tooltip key={guest.guestId} title={guest.guestName} placement="top">
-                        <Avatar src={guest.guestImg} key={guest.guestId} />
-                      </Tooltip>
-                    ))
-                  ) : (
-                    <p>...loading</p>
-                  )}
+                  {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
                 </Avatar.Group>
               </Col>
             </Row>
@@ -127,15 +120,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                   <Avatar src={authorIcon} />
-                  {guests ? (
-                    guests.map((guest: GuestType) => (
-                      <Tooltip key={guest.guestId} title={guest.guestName} placement="top">
-                        <Avatar src={guest.guestImg} key={guest.guestId} />
-                      </Tooltip>
-                    ))
-                  ) : (
-                    <p>...loading</p>
-                  )}
+                  {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
                 </Avatar.Group>
               </Col>
             </Row>
