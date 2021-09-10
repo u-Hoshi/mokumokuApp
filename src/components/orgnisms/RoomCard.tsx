@@ -11,6 +11,7 @@ const { Meta } = Card
 
 const RoomCard: VFC<EditRoomType> = (props) => {
   const {
+    cardSort,
     roomAuthorId,
     roomHostDay,
     roomEndTime,
@@ -55,6 +56,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
   return (
     <>
       <Col span={8} md={10} lg={10} xl={8} xxl={6}>
+        {console.log(isJoin)}
         {isJoin ? (
           <Card
             style={{ backgroundColor: `${cardColor}` }}
@@ -68,7 +70,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
               <MinusOutlined
                 key="attendance"
                 onClick={() => {
-                  cancelJoinMeeting()
+                  cardSort ? cancelJoinMeeting() : message.error('開催済みのため参加キャンセルが出来ません')
                 }}
               />,
             ]}
@@ -103,7 +105,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
               <PlusOutlined
                 key="attendance"
                 onClick={() => {
-                  joinMeeting()
+                  cardSort ? joinMeeting() : message.error('開催済みのため参加出来ません')
                 }}
               />,
             ]}
@@ -133,13 +135,17 @@ const RoomCard: VFC<EditRoomType> = (props) => {
             style={{ textAlign: 'center' }}
             onCancel={handleCancel}
             footer={[
-              <Button key="back" onClick={handleCancel}>
+              <Button key="back" onClick={() => handleCancel()}>
                 キャンセル
               </Button>,
-              <Button type="primary" danger onClick={handleDelete}>
+              <Button
+                type="primary"
+                danger
+                onClick={() => (cardSort ? handleDelete() : message.error('開催済みのため削除出来ません'))}
+              >
                 削除
               </Button>,
-              <Button key="submit" type="primary" onClick={handleChange}>
+              <Button key="submit" type="primary" onClick={() => handleChange()}>
                 変更
               </Button>,
             ]}

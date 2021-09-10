@@ -108,6 +108,7 @@ export const useEditRoom = (
 
   useEffect(() => {
     if (loginUser !== null) {
+      console.log(loginUser)
       let defaultIsJoin = false
       defaultIsJoin = participant.includes(loginUser.uid) ? true : false
       setIsJoin(defaultIsJoin)
