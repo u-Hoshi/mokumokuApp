@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Form, FormInstance, message } from 'antd'
 import moment, { Moment } from 'moment'
 import { GuestType } from 'types/guest'
+import firebase from 'firebase'
 
 const alert = message
 
@@ -80,6 +81,7 @@ export const useEditRoom = (
       db.collection('Group1').doc(roomId).collection('guests').doc(loginUser.uid).set({
         guestId: loginUser.uid,
       })
+      db.collection('Users').doc(loginUser.uid).update('JoinNum', firebase.firestore.FieldValue.increment(1))
     } else {
       message.error('開催者のため参加表明ができません')
     }
@@ -96,6 +98,7 @@ export const useEditRoom = (
           return !loginUser.uid.includes(v)
         })
         setParticipant(leftParticipant)
+        db.collection('Users').doc(loginUser.uid).update('JoinNum', firebase.firestore.FieldValue.increment(-1))
         alert.success('参加取り消しが完了しました')
       })
       .catch(() => {
@@ -190,17 +193,24 @@ export const useEditRoom = (
     }
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setIsModalVisible(false)
-    db.collection('Group1')
-      .doc(roomId)
-      .delete()
-      .then(() => {
-        alert.success('ルームの削除が完了しました')
-      })
-      .catch(() => {
-        alert.error('ルームの削除に失敗しました')
-      })
+
+    const joinsSnapshot = await db.collection(`Group1/${roomId}/guests`).get()
+    joinsSnapshot.docs.map(async (joinDoc) => {
+      await db.collection(`Users`).doc(`${joinDoc.id}`).update('JoinNum', firebase.firestore.FieldValue.increment(-1))
+    }),
+      db
+        .collection('Group1')
+        .doc(roomId)
+        .delete()
+        .then(() => {
+          alert.success('ルームの削除が完了しました')
+          db.collection('Users').doc(loginUser.uid).update('HostNum', firebase.firestore.FieldValue.increment(-1))
+        })
+        .catch(() => {
+          alert.error('ルームの削除に失敗しました')
+        })
   }
 
   const handleCancel = () => {
