@@ -1,4 +1,5 @@
 export type EditRoomType = {
+  cardSort?: boolean
   roomAuthorId: string
   roomHostDay: number[]
   roomEndTime: number[]

@@ -37,6 +37,7 @@ const AddRoom: VFC<any> = (props) => {
         meetType: meetType,
         meetMessage: meetMessage,
       })
+      db.collection('Users').doc(user.uid).update('HostNum', firebase.firestore.FieldValue.increment(1))
       onReset()
       setMeetMessage('')
       alert.success('ルーム追加成功')

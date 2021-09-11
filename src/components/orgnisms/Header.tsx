@@ -2,7 +2,7 @@ import { Row, Anchor, Col, Button } from 'antd'
 import { Typography } from 'antd'
 const { Title, Text } = Typography
 import { VFC, useContext } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { auth } from '../../firebase/index'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
@@ -12,6 +12,10 @@ const Header: VFC = () => {
 
   const onClickUserSetting = () => {
     history.push(`/usersetting/${loginUser.uid}`)
+  }
+
+  const onClickRanking = () => {
+    history.push(`/ranking`)
   }
 
   const onClickTitle = () => {
@@ -30,7 +34,6 @@ const Header: VFC = () => {
           cursor: 'pointer',
         }}
       >
-        {/* <Col> */}
         <Title
           level={3}
           onClick={onClickTitle}
@@ -38,8 +41,16 @@ const Header: VFC = () => {
         >
           もくもく会アプリ
         </Title>
-        {/* </Col> */}
-        {/* <Col> */}
+        <Button
+          ghost
+          onClick={onClickRanking}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          ランキング
+        </Button>
         <Button
           ghost
           onClick={onClickUserSetting}
@@ -50,8 +61,6 @@ const Header: VFC = () => {
         >
           ユーザ設定
         </Button>
-        {/* </Col> */}
-        {/* <Col offset={23}> */}
         <Button
           ghost
           onClick={() => auth.signOut()}

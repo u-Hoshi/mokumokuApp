@@ -1,4 +1,5 @@
 import Login from 'components/pages/Login'
+import Ranking from 'components/pages/Ranking'
 import Room from 'components/pages/Room'
 import Signup from 'components/pages/Signup'
 import UserSetting from 'components/pages/UserSetting'
@@ -21,6 +22,9 @@ export const Router: VFC = () => {
         </Route>
         <Route path="/usersetting/:id">
           <UserSetting />
+        </Route>
+        <Route path="/ranking">
+          <Ranking />
         </Route>
       </LoginUserProvider>
     </Switch>

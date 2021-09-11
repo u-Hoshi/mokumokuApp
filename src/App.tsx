@@ -9,7 +9,9 @@ const App: VFC = () => {
   return (
     <>
       <BrowserRouter>
-        <Router></Router>
+        <div style={{ backgroundColor: '#EFF2F5', height: '100vh' }}>
+          <Router />
+        </div>
       </BrowserRouter>
       {/* <HeaderLayout />
       <RoomTable /> */}

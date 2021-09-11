@@ -39,7 +39,6 @@ const RoomTable: VFC = () => {
   }
   // 全ルームの情報を取得取得
   useEffect(() => {
-    console.log(cardSort)
     if (cardSort) {
       db.collection('Group1')
         .orderBy('startDayTimeInt', 'asc')
@@ -123,6 +122,7 @@ const RoomTable: VFC = () => {
               return (
                 <RoomCard
                   key={room.id}
+                  cardSort={cardSort}
                   roomId={room.id}
                   roomAuthorId={room.AuthorId}
                   roomHostDay={room.hostDay}
