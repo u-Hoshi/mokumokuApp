@@ -2,7 +2,7 @@ import { Row, Anchor, Col, Button } from 'antd'
 import { Typography } from 'antd'
 const { Title, Text } = Typography
 import { VFC, useContext } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { auth } from '../../firebase/index'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
