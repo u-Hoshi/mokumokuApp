@@ -1,4 +1,4 @@
-import { Row, Anchor, Col, Button } from 'antd'
+import { Row, Anchor, Menu, Button, Avatar, Dropdown } from 'antd'
 import { Typography } from 'antd'
 const { Title, Text } = Typography
 import { VFC, useContext } from 'react'
@@ -22,13 +22,59 @@ const Header: VFC = () => {
     history.push('/')
   }
 
+  const menu = (
+    <Menu style={{ padding: '0' }}>
+      <Menu.Item>
+        <Button
+          ghost
+          onClick={onClickRanking}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+            color: 'black',
+          }}
+        >
+          ランキング
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button
+          ghost
+          onClick={onClickUserSetting}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+            color: 'black',
+          }}
+        >
+          ユーザ設定
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button
+          ghost
+          onClick={() => auth.signOut()}
+          style={{
+            border: 'none',
+            cursor: 'pointer',
+            color: 'black',
+          }}
+        >
+          ログアウト
+        </Button>
+      </Menu.Item>
+    </Menu>
+  )
+
   return (
     <>
       <Row
         align="middle"
         style={{
           backgroundColor: '#000224',
-          color: 'white',
+          // color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
           padding: '20px 15px',
           marginBottom: '15px',
           cursor: 'pointer',
@@ -41,37 +87,17 @@ const Header: VFC = () => {
         >
           もくもく会アプリ
         </Title>
-        <Button
-          ghost
-          onClick={onClickRanking}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          ランキング
-        </Button>
-        <Button
-          ghost
-          onClick={onClickUserSetting}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          ユーザ設定
-        </Button>
-        <Button
-          ghost
-          onClick={() => auth.signOut()}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          ログアウト
-        </Button>
+
         {/* </Col> */}
+        {/* <Menu style={{ backgroundColor: '#000224', border: 'none' }}>
+          <Menu.Item style={{ backgroundColor: '#000224' }}>
+            <Avatar src={loginUser?.imgurl} />
+          </Menu.Item>
+        </Menu> */}
+
+        <Dropdown overlay={menu} placement="bottomLeft">
+          <Avatar src={loginUser?.imgurl} />
+        </Dropdown>
       </Row>
     </>
   )

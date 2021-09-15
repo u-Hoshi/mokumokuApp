@@ -64,7 +64,6 @@ const RoomCard: VFC<EditRoomType> = (props) => {
         // xxl={6}
         style={{ width: '330px' }}
       >
-        {console.log(isJoin)}
         {isJoin ? (
           <Card
             style={{ backgroundColor: `${cardColor}` }}
