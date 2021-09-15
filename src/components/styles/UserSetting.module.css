@@ -1,0 +1,14 @@
+
+@media screen and (max-width: 560px) {
+ .userSettingForm{
+   width: 90%;
+ }
+}
+
+
+@media screen and (min-width: 560px) {
+  .userSettingForm{
+    width: 40%;
+    max-width: 550px;
+  }
+}

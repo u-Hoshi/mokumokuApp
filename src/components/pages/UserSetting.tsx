@@ -11,6 +11,7 @@ import { UserType } from 'types/user'
 import ImgCrop from 'antd-img-crop'
 import { UploadFile } from 'antd/lib/upload/interface'
 import SecondaryButton from 'components/atoms/SecondaryButton'
+import styles from '../styles/UserSetting.module.css'
 
 const { TabPane } = Tabs
 
@@ -213,9 +214,8 @@ const UserSetting: VFC = () => {
   return (
     <>
       <HeaderLayout />
-      <h1>ユーザ設定</h1>
       <Row justify="center">
-        <Tabs defaultActiveKey="1" onChange={callback} style={{ width: '50%' }}>
+        <Tabs defaultActiveKey="1" onChange={callback} className={styles.userSettingForm}>
           <TabPane tab="プロフィール設定" key="1">
             <Col>
               <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
