@@ -1,0 +1,14 @@
+
+@media screen and (max-width: 560px) {
+  .setCardDisplay{
+display: block;
+/* text-align: center; */
+  }
+}
+
+
+@media screen and (min-width: 560px) {
+    .setCardDisplay{
+    display: flex;
+  }
+}

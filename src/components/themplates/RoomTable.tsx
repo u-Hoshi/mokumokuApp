@@ -7,6 +7,8 @@ import moment from 'moment'
 import { RoomType } from '../../types/room'
 import { Option } from 'antd/lib/mentions'
 
+import styles from '../styles/RoomTable.module.css'
+
 const { Text } = Typography
 
 const RoomTable: VFC = () => {
@@ -97,26 +99,30 @@ const RoomTable: VFC = () => {
           <Radio value={2}>カレンダー</Radio>
         </Radio.Group>
         {isDisplay || (
-          <>
-            <Text style={{ paddingLeft: '8px' }}>カテゴリ：</Text>
-            <Select style={{ width: 150 }} onChange={(e) => onChangeType(e)} defaultValue={'全て'}>
-              <Option value="全て">全て</Option>
-              <Option value="フロントエンド">フロントエンド</Option>
-              <Option value="バックエンド">バックエンド</Option>
-              <Option value="インフラ">インフラ</Option>
-            </Select>
-            <Text>種類：</Text>
-            <Radio.Group onChange={onChangeSort} defaultValue={1}>
-              <Radio value={1}>開催予定</Radio>
-              <Radio value={2}>開催済み</Radio>
-            </Radio.Group>
-          </>
+          <Col className={styles.setCardDisplay}>
+            <Col style={{}}>
+              <Text>種類：</Text>
+              <Radio.Group onChange={onChangeSort} defaultValue={1}>
+                <Radio value={1}>開催予定</Radio>
+                <Radio value={2}>開催済み</Radio>
+              </Radio.Group>
+            </Col>
+            <Col style={{}}>
+              <Text>カテゴリ：</Text>
+              <Select style={{ width: 150 }} onChange={(e) => onChangeType(e)} defaultValue={'全て'}>
+                <Option value="全て">全て</Option>
+                <Option value="フロントエンド">フロントエンド</Option>
+                <Option value="バックエンド">バックエンド</Option>
+                <Option value="インフラ">インフラ</Option>
+              </Select>
+            </Col>
+          </Col>
         )}
       </Col>
       {isDisplay ? (
         <RoomCalendar rooms={rooms} />
       ) : (
-        <Row gutter={[8, 40]}>
+        <Row gutter={[8, 40]} justify="center">
           {rooms ? (
             rooms.map((room: RoomType) => {
               return (

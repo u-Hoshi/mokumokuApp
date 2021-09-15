@@ -1,0 +1,28 @@
+
+@media screen and (max-width: 920px) {
+  .addRoomPc{
+    display: none;
+  }
+  .addRoomSp{
+    margin: 0 auto;
+    width: 85%;
+  }
+  .roomTable{
+    width: 100%;
+    
+  }
+}
+
+
+@media screen and (min-width: 920px) {
+  .addRoomPc{
+    display: block;
+  }
+  .addRoomSp{
+    display: none;
+  }
+  .roomTable{
+    width: 100%;
+    width: 75%;
+  }
+}
