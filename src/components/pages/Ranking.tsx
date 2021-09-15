@@ -14,20 +14,10 @@ const Ranking: VFC = () => {
     {
       title: '順位',
       dataIndex: 'ranking',
-      width: 100,
+      width: 80,
       align: 'center',
       key: 'ranking',
     },
-    // {
-    //   title: '名前',
-    //   dataIndex: 'name',
-    //   width: 100,
-    //   key: 'name',
-    //   render: ({ userId, name }: { userId: string; name: string }) => {
-    //     console.log(name)
-    //     return <a>{name}</a>
-    //   },
-    // },
     {
       title: '名前',
       dataIndex: 'name',
@@ -54,7 +44,7 @@ const Ranking: VFC = () => {
     {
       title: '順位',
       dataIndex: 'ranking',
-      width: 100,
+      width: 80,
       align: 'center',
       key: 'ranking',
     },
@@ -135,15 +125,18 @@ const Ranking: VFC = () => {
   return (
     <>
       <HeaderLayout />
-      <Col span={20} offset={2} style={{ backgroundColor: 'white', padding: '20px' }}>
+      <Col
+        span={20}
+        style={{ backgroundColor: 'white', padding: '15px', maxWidth: '1200px', width: '90%', margin: '0 auto' }}
+      >
         <Title level={3}>ランキング</Title>
 
         <Tabs defaultActiveKey="1">
           <TabPane tab="参加数ランキング" key="1">
-            <Table columns={joinColumns} pagination={false} dataSource={joinNumDatas} />
+            <Table columns={joinColumns} pagination={false} dataSource={joinNumDatas} scroll={{ x: 1160 }} />
           </TabPane>
           <TabPane tab="開催数ランキング" key="2">
-            <Table columns={hostColumns} pagination={false} dataSource={hostNumDatas} />
+            <Table columns={hostColumns} pagination={false} dataSource={hostNumDatas} scroll={{ x: 1160 }} />
           </TabPane>
         </Tabs>
       </Col>
