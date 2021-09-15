@@ -55,7 +55,15 @@ const RoomCard: VFC<EditRoomType> = (props) => {
   )
   return (
     <>
-      <Col span={8} md={10} lg={10} xl={8} xxl={6}>
+      <Col
+        // span={8}
+        // sm={12}
+        // md={12}
+        // lg={8}
+        // xl={8}
+        // xxl={6}
+        style={{ width: '330px' }}
+      >
         {console.log(isJoin)}
         {isJoin ? (
           <Card
@@ -94,7 +102,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
           </Card>
         ) : (
           <Card
-            style={{ backgroundColor: `${cardColor}` }}
+            style={{ backgroundColor: `${cardColor}`, boxShadow: '3px 3px 5px rgb(221, 221, 221)' }}
             actions={[
               <SettingOutlined
                 key="setting"

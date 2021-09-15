@@ -8,6 +8,7 @@ import firebase from 'firebase'
 import { RangeValue } from 'rc-picker/lib/interface.d'
 import { Moment } from 'moment'
 import SetRoomDetail from 'components/molecules/SetRoomDetail'
+// import styles from '../styles/style.less'
 
 const alert = message
 
@@ -83,7 +84,7 @@ const AddRoom: VFC<any> = (props) => {
 
   return (
     <>
-      <Form onFinish={onFinish} style={{ textAlign: 'center' }} form={form}>
+      <Form onFinish={onFinish} form={form} style={{ marginLeft: '15px' }}>
         <SetRoomDetail
           onChangeTitle={onChangeTitle}
           onChangeDay={onChangeDay}
@@ -92,7 +93,7 @@ const AddRoom: VFC<any> = (props) => {
           onChangeType={onChangeType}
           onChangeMessage={onChangeMessage}
         />
-        <PrimaryButton style={{ marginLeft: '8' }}>会を追加する</PrimaryButton>
+        <PrimaryButton style={{ display: 'block', margin: '0 auto' }}>会を追加する</PrimaryButton>
       </Form>
     </>
   )
