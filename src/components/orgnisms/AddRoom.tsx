@@ -1,4 +1,4 @@
-import { useState, VFC } from 'react'
+import { useState, useContext, VFC } from 'react'
 import { Form, message } from 'antd'
 import 'antd/dist/antd.css'
 import PrimaryButton from 'components/atoms/PrimaryButton'
@@ -8,12 +8,12 @@ import firebase from 'firebase'
 import { RangeValue } from 'rc-picker/lib/interface.d'
 import { Moment } from 'moment'
 import SetRoomDetail from 'components/molecules/SetRoomDetail'
-// import styles from '../styles/style.less'
+import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const alert = message
 
-const AddRoom: VFC<any> = (props) => {
-  const { user } = props
+const AddRoom: VFC<any> = () => {
+  const { loginUser } = useContext(LoginUserContext)
   const [meetTile, setMeetTitle] = useState<string>('もくもく会')
   const [hostDay, setHostDay] = useState<number[]>([])
   const [startTime, setStartTime] = useState<number[]>([])
@@ -28,8 +28,8 @@ const AddRoom: VFC<any> = (props) => {
     try {
       db.collection('Group1').add({
         meetTitle: meetTile,
-        Author: user.displayname,
-        AuthorId: user.uid,
+        Author: loginUser.displayname,
+        AuthorId: loginUser.uid,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         hostDay: hostDay,
         startDayTimeInt: startDayTimeInt,
@@ -38,7 +38,7 @@ const AddRoom: VFC<any> = (props) => {
         meetType: meetType,
         meetMessage: meetMessage,
       })
-      db.collection('Users').doc(user.uid).update('HostNum', firebase.firestore.FieldValue.increment(1))
+      db.collection('Users').doc(loginUser.uid).update('HostNum', firebase.firestore.FieldValue.increment(1))
       onReset()
       setMeetMessage('')
       alert.success('ルーム追加成功')
