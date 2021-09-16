@@ -1,10 +1,11 @@
-import { Row, Anchor, Menu, Button, Avatar, Dropdown } from 'antd'
+import { Row, Anchor, Menu, Button, Avatar, Dropdown, Col } from 'antd'
 import { Typography } from 'antd'
 const { Title, Text } = Typography
 import { VFC, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { auth } from '../../firebase/index'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import { DownOutlined, CaretDownOutlined } from '@ant-design/icons'
 
 const Header: VFC = () => {
   const { loginUser } = useContext(LoginUserContext)
@@ -96,7 +97,10 @@ const Header: VFC = () => {
         </Menu> */}
 
         <Dropdown overlay={menu} placement="bottomLeft">
-          <Avatar src={loginUser?.imgurl} />
+          <Col>
+            <Avatar src={loginUser?.imgurl} />
+            <CaretDownOutlined style={{ color: 'white', paddingLeft: '6px' }} />
+          </Col>
         </Dropdown>
       </Row>
     </>

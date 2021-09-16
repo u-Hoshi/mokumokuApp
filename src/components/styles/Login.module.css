@@ -1,0 +1,14 @@
+
+@media screen and (max-width: 560px) {
+  .loginForm{
+    width: 80%;
+  }
+ }
+ 
+ 
+ @media screen and (min-width: 560px) {
+   .loginForm{
+     width: 40%;
+     max-width: 550px;
+   }
+ }

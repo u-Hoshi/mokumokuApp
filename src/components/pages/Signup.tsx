@@ -8,6 +8,7 @@ import Title from 'antd/lib/typography/Title'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import ImgCrop from 'antd-img-crop'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import styles from '../styles/Signup.module.css'
 
 const alert = message
 
@@ -165,7 +166,7 @@ const Signup: VFC = () => {
         サインアップ
       </Title>
       <Row justify="center">
-        <Col span={10}>
+        <Col className={styles.signupForm}>
           <Form onFinish={handleSubmit}>
             <Form.Item
               label="Username"

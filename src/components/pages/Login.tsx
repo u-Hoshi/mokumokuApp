@@ -5,6 +5,7 @@ import { Form, Input, Button, Row, Typography, Col } from 'antd'
 import PrimaryButton from 'components/atoms/PrimaryButton'
 import LoginHeader from 'components/orgnisms/LoginHeader'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import styles from '../styles/Login.module.css'
 
 const { Title } = Typography
 
@@ -38,7 +39,7 @@ const Login: VFC = () => {
         ログイン
       </Title>
       <Row justify="center">
-        <Col span={10}>
+        <Col className={styles.loginForm}>
           <Form onFinish={handleSubmit} style={{ textAlign: 'center' }}>
             <Form.Item
               label="email"
