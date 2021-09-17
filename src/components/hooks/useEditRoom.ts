@@ -189,6 +189,14 @@ export const useEditRoom = (
         meetMessage: meetMessage,
       })
       alert.success('ルームの編集に成功しました')
+      const payload = {
+        text: `${loginUser.displayname}が${meetTitle}を編集しました。\n
+        開催日：${hostDay[1] + 1}月${hostDay[2]}日\n
+        開催時間：${startTime[3]}時${startTime[4]}分から${endTime[3]}時${endTime[4]}分まで\n
+        カテゴリ：${meetType}\n
+        コメント：${meetMessage}`,
+      }
+      slackNotice(payload)
     } catch (err) {
       alert.error('ルームの編集に失敗しました')
     }
@@ -208,10 +216,33 @@ export const useEditRoom = (
         .then(() => {
           alert.success('ルームの削除が完了しました')
           db.collection('Users').doc(loginUser.uid).update('HostNum', firebase.firestore.FieldValue.increment(-1))
+          const payload = {
+            text: `${loginUser.displayname}が${meetTitle}を削除しました。\n
+           `,
+          }
+          slackNotice(payload)
         })
         .catch(() => {
           alert.error('ルームの削除に失敗しました')
         })
+  }
+
+  const slackNotice = (payload: { text: string }) => {
+    const url = 'https://hooks.slack.com/services/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'
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+      .then((responce) => {
+        console.log(responce)
+        if (!responce.ok) {
+          console.log(responce)
+        }
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
   }
 
   const handleCancel = () => {
