@@ -14,7 +14,7 @@ const alert = message
 
 const AddRoom: VFC<any> = () => {
   const { loginUser } = useContext(LoginUserContext)
-  const [meetTile, setMeetTitle] = useState<string>('もくもく会')
+  const [meetTitle, setMeetTitle] = useState<string>('もくもく会')
   const [hostDay, setHostDay] = useState<number[]>([])
   const [startTime, setStartTime] = useState<number[]>([])
   const [endTime, setEndTime] = useState<number[]>([])
@@ -27,7 +27,7 @@ const AddRoom: VFC<any> = () => {
       hostDay[0] * 100000000 + hostDay[1] * 1000000 + hostDay[2] * 10000 + startTime[3] * 100 + startTime[4]
     try {
       db.collection('Group1').add({
-        meetTitle: meetTile,
+        meetTitle: meetTitle,
         Author: loginUser.displayname,
         AuthorId: loginUser.uid,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -39,6 +39,31 @@ const AddRoom: VFC<any> = () => {
         meetMessage: meetMessage,
       })
       db.collection('Users').doc(loginUser.uid).update('HostNum', firebase.firestore.FieldValue.increment(1))
+
+      const payload = {
+        text: `${loginUser.displayname}が${meetTitle}を作成しました。\n
+        開催日：${hostDay[1] + 1}月${hostDay[2]}日\n
+        開催時間：${startTime[3]}時${startTime[4]}分から${endTime[3]}時${endTime[4]}分まで\n
+        カテゴリ：${meetType}\n
+        コメント：${meetMessage}`,
+      }
+
+      const url = 'https://hooks.slack.com/services/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'
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      })
+        .then((responce) => {
+          console.log(responce)
+          if (!responce.ok) {
+            console.log(responce)
+          }
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
+
       onReset()
       setMeetMessage('')
       alert.success('ルーム追加成功')
