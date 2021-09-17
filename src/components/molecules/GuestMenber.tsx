@@ -30,7 +30,7 @@ const GuestMember: VFC<any> = ({ guest }) => {
   return (
     <>
       <Tooltip key={guest.guestId} title={guestName} placement="top">
-        <Button shape="circle" ghost onClick={onClickGuest}>
+        <Button shape="circle" ghost onClick={onClickGuest} style={{ height: '42px', padding: '0' }}>
           <Avatar src={guestImg} key={guest.guestId} />
         </Button>
       </Tooltip>
