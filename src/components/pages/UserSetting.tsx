@@ -27,7 +27,6 @@ const UserSetting: VFC = () => {
 
   const fetchUser = async (id: string) => {
     const document = await db.doc(`Users/${id}`).get()
-    console.log(document.data()?.email)
     return document.data()
   }
   useEffect(() => {

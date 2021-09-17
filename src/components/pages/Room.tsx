@@ -5,7 +5,7 @@ import { VFC, useContext } from 'react'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import AddRoom from 'components/orgnisms/AddRoom'
 import { UserType } from 'types/user'
-import styles from './Room.module.css'
+import styles from '../styles/Room.module.css'
 import AddRoomFormSp from 'components/themplates/AddRoomFormSp'
 
 const Room: VFC = () => {
