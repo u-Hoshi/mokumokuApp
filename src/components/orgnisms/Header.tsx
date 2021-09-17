@@ -1,6 +1,6 @@
-import { Row, Anchor, Menu, Button, Avatar, Dropdown, Col } from 'antd'
+import { Row, Menu, Avatar, Dropdown, Col } from 'antd'
 import { Typography } from 'antd'
-const { Title, Text } = Typography
+const { Title } = Typography
 import { VFC, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { auth } from '../../firebase/index'
@@ -15,6 +15,10 @@ const Header: VFC = () => {
     history.push(`/usersetting/${loginUser.uid}`)
   }
 
+  const onClickUserProfile = () => {
+    history.push(`/userprofile/${loginUser.uid}`)
+  }
+
   const onClickRanking = () => {
     history.push(`/ranking`)
   }
@@ -25,44 +29,17 @@ const Header: VFC = () => {
 
   const menu = (
     <Menu style={{ padding: '0' }}>
-      <Menu.Item>
-        <Button
-          ghost
-          onClick={onClickRanking}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-            color: 'black',
-          }}
-        >
-          ランキング
-        </Button>
+      <Menu.Item key="ranking" onClick={onClickRanking} style={{ padding: '12px', width: '150px' }}>
+        ランキング
       </Menu.Item>
-      <Menu.Item>
-        <Button
-          ghost
-          onClick={onClickUserSetting}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-            color: 'black',
-          }}
-        >
-          ユーザ設定
-        </Button>
+      <Menu.Item onClick={onClickUserProfile} style={{ padding: '12px', width: '150px' }}>
+        プロフィールを確認
       </Menu.Item>
-      <Menu.Item>
-        <Button
-          ghost
-          onClick={() => auth.signOut()}
-          style={{
-            border: 'none',
-            cursor: 'pointer',
-            color: 'black',
-          }}
-        >
-          ログアウト
-        </Button>
+      <Menu.Item onClick={onClickUserSetting} style={{ padding: '12px', width: '150px' }}>
+        ユーザ設定
+      </Menu.Item>
+      <Menu.Item onClick={() => auth.signOut()} style={{ padding: '12px', width: '150px' }}>
+        ログアウト
       </Menu.Item>
     </Menu>
   )
@@ -73,29 +50,19 @@ const Header: VFC = () => {
         align="middle"
         style={{
           backgroundColor: '#000224',
-          // color: 'white',
           display: 'flex',
           justifyContent: 'space-between',
           padding: '20px 15px',
           marginBottom: '15px',
-          cursor: 'pointer',
         }}
       >
         <Title
           level={3}
           onClick={onClickTitle}
-          style={{ color: 'white', textAlign: 'center', marginBottom: '0', paddingRight: '10px' }}
+          style={{ color: 'white', cursor: 'pointer', textAlign: 'center', marginBottom: '0', paddingRight: '10px' }}
         >
-          もくもく会アプリ
+          モクスケ
         </Title>
-
-        {/* </Col> */}
-        {/* <Menu style={{ backgroundColor: '#000224', border: 'none' }}>
-          <Menu.Item style={{ backgroundColor: '#000224' }}>
-            <Avatar src={loginUser?.imgurl} />
-          </Menu.Item>
-        </Menu> */}
-
         <Dropdown overlay={menu} placement="bottomLeft">
           <Col>
             <Avatar src={loginUser?.imgurl} />
