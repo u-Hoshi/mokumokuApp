@@ -7,6 +7,7 @@ import { useEditRoom } from 'components/hooks/useEditRoom'
 import { GuestType } from 'types/guest'
 import { EditRoomType } from 'types/editroom'
 import GuestMember from 'components/molecules/GuestMenber'
+import { useHistory } from 'react-router-dom'
 const { Meta } = Card
 
 const RoomCard: VFC<EditRoomType> = (props) => {
@@ -53,6 +54,13 @@ const RoomCard: VFC<EditRoomType> = (props) => {
     roomStartTime,
     roomId
   )
+
+  const history = useHistory()
+
+  const onClickHost = () => {
+    history.push(`/userprofile/${roomAuthorId}`)
+  }
+
   return (
     <>
       <Col
@@ -93,7 +101,9 @@ const RoomCard: VFC<EditRoomType> = (props) => {
               <Col flex="50px">
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-                  <Avatar src={authorIcon} />
+                  <Button shape="circle" ghost onClick={onClickHost} style={{ height: '42px', padding: '0' }}>
+                    <Avatar src={authorIcon} />
+                  </Button>
                   {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
                 </Avatar.Group>
               </Col>
@@ -118,7 +128,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
             ]}
           >
             <Meta avatar={<Avatar src={authorIcon} />} title={roomMeetTitle} description={authorName} />
-            <h3>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
+            <h3 style={{ marginTop: '6px' }}>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
             <h3>{`${roomStartTime[3]}時${roomStartTime[4]}分から${roomEndTime[3]}時${roomEndTime[4]}分まで`}</h3>
             <h4>{roomMeetType}</h4>
             <Row>
@@ -128,7 +138,9 @@ const RoomCard: VFC<EditRoomType> = (props) => {
               <Col flex="50px">
                 <p>参加者</p>
                 <Avatar.Group maxCount={1} size="large" maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-                  <Avatar src={authorIcon} />
+                  <Button shape="circle" ghost onClick={onClickHost} style={{ height: '42px', padding: '0' }}>
+                    <Avatar src={authorIcon} />
+                  </Button>
                   {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
                 </Avatar.Group>
               </Col>

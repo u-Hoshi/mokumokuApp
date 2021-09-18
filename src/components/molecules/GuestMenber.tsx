@@ -1,13 +1,14 @@
-import { Avatar, Tooltip } from 'antd'
+import { Avatar, Button, Col, Tooltip } from 'antd'
 import { db } from '../../firebase/index'
 import { useState, useEffect, VFC } from 'react'
+import { useHistory } from 'react-router-dom'
 
 const GuestMember: VFC<any> = ({ guest }) => {
+  const history = useHistory()
   const [guestName, setGuestName] = useState('')
   const [guestImg, setGuestImg] = useState('')
 
   useEffect(() => {
-    console.log(guest.uid)
     db.collection('Users')
       .doc(guest.guestId)
       .get()
@@ -22,12 +23,16 @@ const GuestMember: VFC<any> = ({ guest }) => {
     console.log(guestImg)
   }, [])
 
-  console.log(guestImg)
+  const onClickGuest = () => {
+    history.push(`/userprofile/${guest.guestId}`)
+  }
 
   return (
     <>
       <Tooltip key={guest.guestId} title={guestName} placement="top">
-        <Avatar src={guestImg} key={guest.guestId} />
+        <Button shape="circle" ghost onClick={onClickGuest} style={{ height: '42px', padding: '0' }}>
+          <Avatar src={guestImg} key={guest.guestId} />
+        </Button>
       </Tooltip>
     </>
   )

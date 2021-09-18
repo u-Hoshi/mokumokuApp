@@ -2,6 +2,7 @@ import Login from 'components/pages/Login'
 import Ranking from 'components/pages/Ranking'
 import Room from 'components/pages/Room'
 import Signup from 'components/pages/Signup'
+import UserProfile from 'components/pages/UserProfile'
 import UserSetting from 'components/pages/UserSetting'
 import { LoginUserProvider } from 'components/providers/LoginUserProvider'
 import { VFC } from 'react'
@@ -19,6 +20,9 @@ export const Router: VFC = () => {
         </Route>
         <Route exact path="/">
           <Room />
+        </Route>
+        <Route path="/userprofile/:id">
+          <UserProfile />
         </Route>
         <Route path="/usersetting/:id">
           <UserSetting />
