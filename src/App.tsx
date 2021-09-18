@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import RoomTable from 'components/pages/Room'
+import HeaderLayout from 'components/themplates/HeaderLayout'
+import { BrowserRouter } from 'react-router-dom'
 
-function App() {
+import React, { VFC } from 'react'
+import { Router } from 'components/router/Router'
+
+const App: VFC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <BrowserRouter>
+        <div style={{ backgroundColor: '#EFF2F5', minHeight: '100vh' }}>
+          <Router />
+        </div>
+      </BrowserRouter>
+      {/* <HeaderLayout />
+      <RoomTable /> */}
+    </>
+  )
 }
 
-export default App;
+export default App

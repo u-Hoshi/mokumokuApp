@@ -1,46 +1,55 @@
-# Getting Started with Create React App
+# もくスケ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**エンジニアが安心して「もくもく会を開催・参加できる」ためのスケジュールアプリです。**
 
-## Available Scripts
+ユーザはもくもく会の予定を追加することができ、カード形式とカレンダー形式で確認できる仕様です。
 
-In the project directory, you can run:
+(まだレスポンシブは未対応です)
 
-### `yarn start`
+DemoURL：https://staging-mekumoku.netlify.app/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## きっかけ
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+インターン先で使われている技術の知識をさらに深く身につけたいと思い個人開発をしようと考えました。
 
-### `yarn test`
+その題材で誰かの課題を解決したいと思い色んな人にヒアリングをしました。その中で CTO と話した際に出てきた
+**「もくもく会を開いた時って誰来てくれるか不安だよね」**
+という課題を解決したいと作成しようと決めました。
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 現状できること
 
-### `yarn build`
+- サインアップ・ログイン・ログアウト
+- もくもく会のスケジュール追加/削除
+- もくもく会に参加表明機能 (カードの+ボタンで)
+- もくもく会の情報を編集
+- ユーザ情報の変更
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 使い方
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### トップページ (カード表示)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<img width="1431" alt="top" src="https://user-images.githubusercontent.com/56116874/130394777-18228d94-9b29-4518-98e2-68d32f07e17a.png">
 
-### `yarn eject`
+右側の欄から会のスケジュールを追加することができます。
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+左側の ⚙ でスケジュールの変更ができます(開催者のみ)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+➕ で参加表明、➖ で参加取り消しすることができます。
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### カレンダー表示
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<img width="1440" alt="スクリーンショット 2021-08-24 7 34 16" src="https://user-images.githubusercontent.com/56116874/130528276-254cd662-e99d-4fec-a7fe-7ff0c7672954.png">
 
-## Learn More
+カレンダー内の文字をクリックすると、会の編集もしくは参加表明、参加取り消しができます。
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![2](https://user-images.githubusercontent.com/56116874/130528281-3a707121-f9e2-4692-9810-ac348e0a36c3.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+左が参加表明済みの人の表示、右が開催者の人の表示です。
+
+## 使用技術
+
+- React
+- TypeScript
+- React-router-dom
+- AntDesign
+- Firebase
