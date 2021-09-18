@@ -4,7 +4,7 @@
     width: 95%;
     margin: 0 auto;
     background-color: white;
-    padding: 20px 
+    padding: 20px ;
   }
  }
  
@@ -12,7 +12,7 @@
  @media screen and (min-width: 560px) {
    .userProfile{
      width: 95%;
-     /* max-width: 1200px; */
+     max-width: 1550px;
      margin: 0 auto;
      background-color: white;
      padding: 20px

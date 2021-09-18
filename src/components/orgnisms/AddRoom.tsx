@@ -11,6 +11,7 @@ import SetRoomDetail from 'components/molecules/SetRoomDetail'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 
 const alert = message
+const WEBHOOK_KEY = process.env.REACT_APP_WEBHOOK
 
 const AddRoom: VFC<any> = () => {
   const { loginUser } = useContext(LoginUserContext)
@@ -48,9 +49,9 @@ const AddRoom: VFC<any> = () => {
         コメント：${meetMessage}`,
       }
 
-      const url = 'https://hooks.slack.com/services/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'
-
-      fetch(url, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      fetch(WEBHOOK_KEY, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
@@ -82,7 +83,6 @@ const AddRoom: VFC<any> = () => {
   }
 
   const onChangeDay = (day: Moment | null, dateString: string) => {
-    console.log(dateString)
     if (day !== null) {
       setHostDay(day.toArray())
     }

@@ -1,6 +1,6 @@
 import { useState, VFC, useCallback, useContext } from 'react'
 import { auth, db, storage } from '../../firebase/index'
-import { Form, Input, Row, Col, Upload, message, Button } from 'antd'
+import { Form, Input, Row, Col, Upload, message, Button, InputNumber } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useHistory } from 'react-router'
 import LoginHeader from 'components/orgnisms/LoginHeader'
@@ -18,14 +18,13 @@ const Signup: VFC = () => {
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
+  const [periodYear, setPeriodYear] = useState<number>()
+  const [periodMonth, setPeriodMonth] = useState<number>()
   const history = useHistory()
   const handleSubmit = useCallback(() => {
-    console.log('email' + email)
-    console.log('password' + password)
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(async (result) => {
-        console.log('foo')
         const user = result.user
         history.push('/')
         if (user) {
@@ -36,6 +35,8 @@ const Signup: VFC = () => {
             password: password,
             displayname: userName,
             email: email,
+            periodYear: periodYear,
+            periodMonth: periodMonth,
           }
           await db.collection('Users').doc(uid).set(userInfo)
           // アイコンの保存
@@ -49,14 +50,12 @@ const Signup: VFC = () => {
               { merge: true }
             )
           }
-          console.log('bar')
+
           await db
             .collection(`Users`)
             .doc(uid)
             .get()
             .then((d) => {
-              console.log(d)
-              console.log(d.data)
               const data: any = d.data()
               if (d.data !== undefined) {
                 setLoginUser({
@@ -65,27 +64,24 @@ const Signup: VFC = () => {
                   password: data.password,
                   displayname: data.displayname,
                   imgurl: data.imgurl,
+                  periodYear: data.periodYera,
+                  periodMonth: data.periodMonth,
                 })
               }
-              console.log('num')
             })
         }
-        console.log('hoge')
       })
       .catch((err) => {
         if (err.toString() == '[firebase_auth/invalid-email] The email address is badly formatted.') {
           return 'error:email'
         }
         console.log('err' + err)
-        console.log('サインアップ失敗です')
       })
-    console.log('last')
   }, [email, password, loginUser, userName, fileList])
 
   const saveImg = useCallback(
     async (user) => {
       const imageName = fileList[0]
-      console.log(imageName)
 
       const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       const N = 16
@@ -96,7 +92,7 @@ const Signup: VFC = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
-      console.log(imageName)
+
       storage
         .ref(`images`)
         .child(fileName)
@@ -118,14 +114,6 @@ const Signup: VFC = () => {
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
       console.log(fileList[0]?.status)
-      if (fileList[0]?.status === 'error') {
-        console.log('done')
-      }
-      // if (newFileList.file.status === 'done') {
-      //   message.success(`${newFileList.file.name} file uploaded successfully`)
-      // } else if (newFileList.file.status === 'error') {
-      //   message.error(`${newFileList.file.name} file upload failed.`)
-      // }
     },
     [fileList[0]]
   )
@@ -160,7 +148,6 @@ const Signup: VFC = () => {
 
   return (
     <>
-      {/* ログイン・サインアップ共通のヘッダーをorgnismsから呼び出す */}
       <LoginHeader />
       <Title level={2} style={{ textAlign: 'center' }}>
         サインアップ
@@ -169,7 +156,7 @@ const Signup: VFC = () => {
         <Col className={styles.signupForm}>
           <Form onFinish={handleSubmit}>
             <Form.Item
-              label="Username"
+              label="ユーザー名"
               name="username"
               rules={[{ required: true, message: 'Please input your username!' }]}
               style={{ flexDirection: 'column' }}
@@ -182,14 +169,14 @@ const Signup: VFC = () => {
               />
             </Form.Item>
             <Form.Item
-              label="email"
+              label="メールアドレス"
               name="email"
               rules={[
                 {
                   type: 'email',
-                  message: 'The input is not valid E-mail!',
+                  message: '有効ではないメールアドレスです。',
                 },
-                { required: true, message: 'Please input your email!' },
+                { required: true, message: 'メールアドレスを入力して下さい' },
               ]}
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
@@ -200,8 +187,9 @@ const Signup: VFC = () => {
                 }}
               />
             </Form.Item>
+
             <Form.Item
-              label="password"
+              label="パスワード"
               name="password"
               rules={[{ required: true, message: 'Please input your password!' }]}
               style={{ flexDirection: 'column' }}
@@ -214,17 +202,25 @@ const Signup: VFC = () => {
               />
             </Form.Item>
             <Form.Item
-              label="icon(jpgのみ)"
-              name="file"
+              // noStyle
+              label="プログラミング歴"
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please input your icon!',
-              //   },
-              // ]}
             >
+              <InputNumber
+                onChange={(e: number) => {
+                  setPeriodYear(e)
+                }}
+              />
+              年
+              <InputNumber
+                onChange={(e: number) => {
+                  setPeriodMonth(e)
+                }}
+              />
+              ヶ月
+            </Form.Item>
+            <Form.Item label="アイコン(jpgのみ)" name="file" style={{ flexDirection: 'column' }} labelAlign={'left'}>
               <ImgCrop rotate>
                 <Upload
                   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"

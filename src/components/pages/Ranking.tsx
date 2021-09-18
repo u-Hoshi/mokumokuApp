@@ -120,8 +120,6 @@ const Ranking: VFC = () => {
         setHostNumDatas(users)
       })
   }, [])
-
-  const defaultCurrent = 1
   return (
     <>
       <HeaderLayout />
@@ -129,7 +127,7 @@ const Ranking: VFC = () => {
         span={20}
         style={{ backgroundColor: 'white', padding: '15px', maxWidth: '1200px', width: '90%', margin: '0 auto' }}
       >
-        <Title level={3}>ランキング</Title>
+        <Title level={3}>ランキングTOP5</Title>
 
         <Tabs defaultActiveKey="1">
           <TabPane tab="参加数ランキング" key="1">
