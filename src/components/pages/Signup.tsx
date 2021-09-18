@@ -25,7 +25,6 @@ const Signup: VFC = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(async (result) => {
-        console.log('foo')
         const user = result.user
         history.push('/')
         if (user) {
@@ -51,14 +50,12 @@ const Signup: VFC = () => {
               { merge: true }
             )
           }
-          console.log('bar')
+
           await db
             .collection(`Users`)
             .doc(uid)
             .get()
             .then((d) => {
-              console.log(d)
-              console.log(d.data)
               const data: any = d.data()
               if (d.data !== undefined) {
                 setLoginUser({
@@ -71,7 +68,6 @@ const Signup: VFC = () => {
                   periodMonth: data.periodMonth,
                 })
               }
-              console.log('num')
             })
         }
       })
@@ -86,7 +82,6 @@ const Signup: VFC = () => {
   const saveImg = useCallback(
     async (user) => {
       const imageName = fileList[0]
-      console.log(imageName)
 
       const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       const N = 16
@@ -97,7 +92,7 @@ const Signup: VFC = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
-      console.log(imageName)
+
       storage
         .ref(`images`)
         .child(fileName)
@@ -119,9 +114,6 @@ const Signup: VFC = () => {
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
       console.log(fileList[0]?.status)
-      if (fileList[0]?.status === 'error') {
-        console.log('done')
-      }
     },
     [fileList[0]]
   )

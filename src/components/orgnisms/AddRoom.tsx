@@ -83,7 +83,6 @@ const AddRoom: VFC<any> = () => {
   }
 
   const onChangeDay = (day: Moment | null, dateString: string) => {
-    console.log(dateString)
     if (day !== null) {
       setHostDay(day.toArray())
     }

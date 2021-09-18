@@ -10,7 +10,6 @@ type Props = {
 
 const RoomCalendar: VFC<Props> = (props) => {
   const { rooms } = props
-  console.log(rooms)
   const getListData = (value: Moment, rooms: RoomType[]) => {
     // valueはカレンダーに表示される日数に渡され、毎回実行される(42日)
     let listData: any[] = []
