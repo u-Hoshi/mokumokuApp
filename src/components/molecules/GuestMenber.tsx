@@ -20,7 +20,6 @@ const GuestMember: VFC<any> = ({ guest }) => {
           console.log('not documentdata')
         }
       })
-    console.log(guestImg)
   }, [])
 
   const onClickGuest = () => {

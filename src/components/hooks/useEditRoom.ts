@@ -6,12 +6,9 @@ import { Form, FormInstance, message } from 'antd'
 import moment, { Moment } from 'moment'
 import { GuestType } from 'types/guest'
 import firebase from 'firebase'
-import Config from '../../config'
 
 const alert = message
 const WEBHOOK_KEY = process.env.REACT_APP_WEBHOOK
-console.log(WEBHOOK_KEY)
-console.log('https://hooks.slack.com/services/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')
 
 type Room = {
   roomAuthorId: string
@@ -112,7 +109,6 @@ export const useEditRoom = (
 
   useEffect(() => {
     if (loginUser !== null) {
-      console.log(loginUser)
       let defaultIsJoin = false
       defaultIsJoin = participant.includes(loginUser.uid) ? true : false
       setIsJoin(defaultIsJoin)
@@ -230,7 +226,6 @@ export const useEditRoom = (
           alert.error('ルームの削除に失敗しました')
         })
   }
-  // console.log(Config.apiUrl)
   const slackNotice = (payload: { text: string }) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

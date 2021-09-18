@@ -88,7 +88,7 @@ const UserSetting: VFC = () => {
         { merge: true }
       )
     }
-    console.log('bar')
+
     db.collection(`Users`)
       .doc(loginUser.uid)
       .get()
@@ -108,7 +108,6 @@ const UserSetting: VFC = () => {
   const saveImg = useCallback(
     async (loginUser) => {
       const imageName = fileList[0]
-      console.log(imageName)
 
       const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       const N = 16
@@ -119,7 +118,7 @@ const UserSetting: VFC = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
-      console.log(imageName)
+
       storage
         .ref(`images`)
         .child(fileName)
@@ -162,7 +161,7 @@ const UserSetting: VFC = () => {
     const image = new Image()
     image.src = src
     const imgWindow = window.open(src)
-    console.log(src)
+
     if (imgWindow !== null) {
       imgWindow.document.write(image.outerHTML)
     }

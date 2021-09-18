@@ -113,11 +113,9 @@ const Signup: VFC = () => {
   const onFileChange = useCallback(
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
-      console.log(fileList[0]?.status)
     },
     [fileList[0]]
   )
-  console.log(fileList)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -136,7 +134,7 @@ const Signup: VFC = () => {
     const image = new Image()
     image.src = src
     const imgWindow = window.open(src)
-    console.log(src)
+
     if (imgWindow !== null) {
       imgWindow.document.write(image.outerHTML)
     }
