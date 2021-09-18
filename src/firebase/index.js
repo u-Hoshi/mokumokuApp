@@ -8,4 +8,5 @@ firebase.initializeApp(firebaseConfig)
 
 export const auth = firebase.auth()
 export const db = firebase.firestore()
+db.settings({ ignoreUndefinedProperties: true })
 export const storage = firebase.storage()

@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col, message, Tabs, Upload } from 'antd'
+import { Form, Input, Row, Col, message, Tabs, Upload, InputNumber } from 'antd'
 import { useCallback, useContext, useEffect, useState, VFC } from 'react'
 import { useParams } from 'react-router-dom'
 import PrimaryButton from 'components/atoms/PrimaryButton'
@@ -24,15 +24,17 @@ const UserSetting: VFC = () => {
   const [userMemo, setUserMemo] = useState<string>('')
   const history = useHistory()
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
+  const [periodYear, setPeriodYear] = useState<number>()
+  const [periodMonth, setPeriodMonth] = useState<number>()
 
   const fetchUser = async (id: string) => {
     const document = await db.doc(`Users/${id}`).get()
     return document.data()
   }
   useEffect(() => {
-    console.log(id)
     fetchUser(id).then((user) => {
       setUserInfo(user)
+      setUserName(user?.displayname)
     })
   }, [])
 
@@ -43,16 +45,17 @@ const UserSetting: VFC = () => {
       user
         ?.reauthenticateWithCredential(credential)
         .then(() => {
-          if (userName !== '' || email !== '') {
-            db.collection('Users').doc(loginUser.uid).update({
-              displayname: userName,
-              email: email,
-              usermemo: userMemo,
-            })
-          }
+          db.collection('Users').doc(loginUser.uid).update({
+            displayname: userName,
+            email: email,
+            usermemo: userMemo,
+            periodYear: periodYear,
+            periodMonth: periodMonth,
+          })
 
           user?.updateEmail(`${email}`).catch((error: string) => {
             message.error('変更に失敗しました。時間を空けてから再変更してください。')
+            console.log(error)
             history.push('/')
           })
           message.success('変更に成功しました')
@@ -61,9 +64,10 @@ const UserSetting: VFC = () => {
         .catch((error) => {
           message.error('変更に失敗しました。時間を空けてから再変更してください。')
           history.push('/')
+          console.log(error)
         })
     },
-    [email, userName, userMemo]
+    [email, userName, userMemo, periodYear, periodMonth]
   )
 
   function callback(key: string) {
@@ -71,8 +75,6 @@ const UserSetting: VFC = () => {
   }
 
   const changeIcon = useCallback(() => {
-    console.log('foo')
-
     history.push('/')
 
     // アイコンの保存
@@ -91,17 +93,12 @@ const UserSetting: VFC = () => {
       .doc(loginUser.uid)
       .get()
       .then((d) => {
-        console.log(d)
-        console.log(d.data)
         const data: any = d.data()
         if (d.data !== undefined) {
           setLoginUser({
             imgurl: data.imgurl,
           })
         }
-        console.log('num')
-
-        console.log('hoge')
       })
       .catch((err) => {
         console.log('err' + err)
@@ -143,15 +140,6 @@ const UserSetting: VFC = () => {
   const onFileChange = useCallback(
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
-      console.log(fileList[0]?.status)
-      if (fileList[0]?.status === 'error') {
-        console.log('done')
-      }
-      // if (newFileList.file.status === 'done') {
-      //   message.success(`${newFileList.file.name} file uploaded successfully`)
-      // } else if (newFileList.file.status === 'error') {
-      //   message.error(`${newFileList.file.name} file upload failed.`)
-      // }
     },
     [fileList[0]]
   )
@@ -188,13 +176,10 @@ const UserSetting: VFC = () => {
       { merge: true }
     )
 
-    console.log('bar')
     db.collection(`Users`)
       .doc(loginUser.uid)
       .get()
       .then((d) => {
-        console.log(d)
-        console.log(d.data)
         const data: any = d.data()
         if (d.data !== undefined) {
           setLoginUser({
@@ -218,22 +203,16 @@ const UserSetting: VFC = () => {
           <TabPane tab="プロフィール設定" key="1">
             <Col>
               <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
-                <Form.Item
-                  label="Username"
-                  name="username"
-                  rules={[{ required: true, message: 'Please input your username!' }]}
-                  style={{ flexDirection: 'column' }}
-                  labelAlign={'left'}
-                >
+                <Form.Item label="ユーザ名" name="username" style={{ flexDirection: 'column' }} labelAlign={'left'}>
                   <Input
                     onChange={(e) => {
                       setUserName(e.target.value)
                     }}
                   />
                 </Form.Item>
-                <p>{userInfo?.email}</p>
+                {/* <p>{userInfo?.email}</p> */}
                 <Form.Item
-                  label="email"
+                  label="メールアドレス"
                   name="email"
                   rules={[
                     {
@@ -250,6 +229,25 @@ const UserSetting: VFC = () => {
                       setEmail(e.target.value)
                     }}
                   />
+                </Form.Item>
+                <Form.Item
+                  // noStyle
+                  label="プログラミング歴"
+                  style={{ flexDirection: 'column' }}
+                  labelAlign={'left'}
+                >
+                  <InputNumber
+                    onChange={(e: number) => {
+                      setPeriodYear(e)
+                    }}
+                  />
+                  年
+                  <InputNumber
+                    onChange={(e: number) => {
+                      setPeriodMonth(e)
+                    }}
+                  />
+                  ヶ月
                 </Form.Item>
                 <Form.Item label="自己紹介" name="自己紹介" style={{ flexDirection: 'column' }} labelAlign={'left'}>
                   <Input.TextArea
