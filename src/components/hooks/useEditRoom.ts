@@ -83,6 +83,7 @@ export const useEditRoom = (
         guestId: loginUser.uid,
       })
       db.collection('Users').doc(loginUser.uid).update('JoinNum', firebase.firestore.FieldValue.increment(1))
+      alert.success('参加表明が完了しました')
     } else {
       message.error('開催者のため参加表明ができません')
     }

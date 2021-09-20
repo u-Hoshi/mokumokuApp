@@ -25,3 +25,4 @@ yarn-error.log*
 react-app-env.d.ts
 
 .env
+/src/firebase/config.js

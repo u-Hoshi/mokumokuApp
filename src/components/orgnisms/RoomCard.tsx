@@ -91,7 +91,7 @@ const RoomCard: VFC<EditRoomType> = (props) => {
             ]}
           >
             <Meta avatar={<Avatar src={authorIcon} />} title={roomMeetTitle} description={authorName} />
-            <h3>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
+            <h3 style={{ marginTop: '6px' }}>{`${roomHostDay[1] + 1}月${roomHostDay[2]}日`}</h3>
             <h3>{`${roomStartTime[3]}時${roomStartTime[4]}分から${roomEndTime[3]}時${roomEndTime[4]}分まで`}</h3>
             <h4>{roomMeetType}</h4>
             <Row>
