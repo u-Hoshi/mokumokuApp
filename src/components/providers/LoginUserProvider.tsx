@@ -46,7 +46,7 @@ export const LoginUserProvider = (props: { children: ReactNode }) => {
     })
   }, [])
   history
-  console.log(loginUser)
+
   // 別のProviderで保持するのもアリ
   return <LoginUserContext.Provider value={{ loginUser, setLoginUser }}>{children}</LoginUserContext.Provider>
 }

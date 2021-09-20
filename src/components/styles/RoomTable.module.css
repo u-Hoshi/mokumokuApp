@@ -3,6 +3,7 @@
   .setCardDisplay{
 display: block;
 /* text-align: center; */
+line-height: 39px;
   }
 }
 
@@ -10,5 +11,6 @@ display: block;
 @media screen and (min-width: 560px) {
     .setCardDisplay{
     display: flex;
+    line-height: 39px;
   }
 }
