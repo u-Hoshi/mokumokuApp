@@ -2,8 +2,10 @@ import { Avatar, Button, Col, Tooltip } from 'antd'
 import { db } from '../../firebase/index'
 import { useState, useEffect, VFC } from 'react'
 import { useHistory } from 'react-router-dom'
+import { GuestType } from 'types/guest'
 
 const GuestMember: VFC<any> = ({ guest }) => {
+  console.log(guest)
   const history = useHistory()
   const [guestName, setGuestName] = useState('')
   const [guestImg, setGuestImg] = useState('')

@@ -104,7 +104,11 @@ const RoomCard: VFC<EditRoomType> = (props) => {
                   <Button shape="circle" ghost onClick={onClickHost} style={{ height: '42px', padding: '0' }}>
                     <Avatar src={authorIcon} />
                   </Button>
-                  {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
+                  {guests ? (
+                    guests.map((guest: { guestId: string }) => <GuestMember guest={guest} />)
+                  ) : (
+                    <p>...loading</p>
+                  )}
                 </Avatar.Group>
               </Col>
             </Row>
@@ -141,7 +145,11 @@ const RoomCard: VFC<EditRoomType> = (props) => {
                   <Button shape="circle" ghost onClick={onClickHost} style={{ height: '42px', padding: '0' }}>
                     <Avatar src={authorIcon} />
                   </Button>
-                  {guests ? guests.map((guest: GuestType) => <GuestMember guest={guest} />) : <p>...loading</p>}
+                  {guests ? (
+                    guests.map((guest: { guestId: string }) => <GuestMember guest={guest} />)
+                  ) : (
+                    <p>...loading</p>
+                  )}
                 </Avatar.Group>
               </Col>
             </Row>

@@ -1,4 +1,4 @@
-import { Form, Input, Row, Col, message, Tabs, Upload, InputNumber } from 'antd'
+import { Form, Input, Row, Col, message, Tabs, Upload } from 'antd'
 import { useCallback, useContext, useEffect, useState, VFC } from 'react'
 import { useParams } from 'react-router-dom'
 import PrimaryButton from 'components/atoms/PrimaryButton'
@@ -7,7 +7,6 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import { useHistory } from 'react-router'
 import firebase from 'firebase'
 import HeaderLayout from 'components/themplates/HeaderLayout'
-import { UserType } from 'types/user'
 import ImgCrop from 'antd-img-crop'
 import { UploadFile } from 'antd/lib/upload/interface'
 import SecondaryButton from 'components/atoms/SecondaryButton'
@@ -24,17 +23,16 @@ const UserSetting: VFC = () => {
   const [userMemo, setUserMemo] = useState<string>('')
   const history = useHistory()
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
-  const [periodYear, setPeriodYear] = useState<number>()
-  const [periodMonth, setPeriodMonth] = useState<number>()
 
   const fetchUser = async (id: string) => {
     const document = await db.doc(`Users/${id}`).get()
+    console.log(document.data()?.email)
     return document.data()
   }
   useEffect(() => {
+    console.log(id)
     fetchUser(id).then((user) => {
       setUserInfo(user)
-      setUserName(user?.displayname)
     })
   }, [])
 
@@ -45,17 +43,16 @@ const UserSetting: VFC = () => {
       user
         ?.reauthenticateWithCredential(credential)
         .then(() => {
-          db.collection('Users').doc(loginUser.uid).update({
-            displayname: userName,
-            email: email,
-            usermemo: userMemo,
-            periodYear: periodYear,
-            periodMonth: periodMonth,
-          })
+          if (userName !== '' || email !== '') {
+            db.collection('Users').doc(loginUser.uid).update({
+              displayname: userName,
+              email: email,
+              usermemo: userMemo,
+            })
+          }
 
           user?.updateEmail(`${email}`).catch((error: string) => {
             message.error('変更に失敗しました。時間を空けてから再変更してください。')
-            console.log(error)
             history.push('/')
           })
           message.success('変更に成功しました')
@@ -64,24 +61,25 @@ const UserSetting: VFC = () => {
         .catch((error) => {
           message.error('変更に失敗しました。時間を空けてから再変更してください。')
           history.push('/')
-          console.log(error)
         })
     },
-    [email, userName, userMemo, periodYear, periodMonth]
+    [email, userName, userMemo]
   )
 
   function callback(key: string) {
     // console.log(key)
   }
 
-  const changeIcon = useCallback(() => {
-    history.push('/')
+  const changeIcon = useCallback(async () => {
+    console.log('debug.changeIcon.start')
 
-    // アイコンの保存
+    // Firestorage に画像保存
+    // Firebase User collection に画像 URL 保存
+    // await によって保存が完了したことを担保してから次の処理に進みます
     if (fileList[0]) {
-      saveImg(loginUser)
+      await saveImg(loginUser)
     } else {
-      db.collection('Users').doc(loginUser.uid).set(
+      await db.collection('Users').doc(loginUser.uid).set(
         {
           imgurl: '',
         },
@@ -89,47 +87,86 @@ const UserSetting: VFC = () => {
       )
     }
 
-    db.collection(`Users`)
+    // await によってｓが取得が完了したことを担保してから
+    // ユーザの global context を更新し, ホーム画面へ遷移します
+    await db
+      .collection('Users')
       .doc(loginUser.uid)
       .get()
-      .then((d) => {
-        const data: any = d.data()
-        if (d.data !== undefined) {
-          setLoginUser({
-            imgurl: data.imgurl,
-          })
+      .then((snapshot) => {
+        if (!snapshot.exists) {
+          console.log('documentSnapshot.not.exist')
+        } else {
+          const data = snapshot.data()
+          if (data !== undefined) {
+            console.log('debug.firebase.get.imgurl: ' + data.imgurl)
+            setLoginUser({
+              imgurl: data.imgurl,
+            })
+          }
         }
       })
-      .catch((err) => {
-        console.log('err' + err)
+      .catch((err: Error) => {
+        console.log(err)
       })
+
+    console.log('debug.changeIcon.finish')
+    history.push('/')
   }, [fileList])
 
   const saveImg = useCallback(
     async (loginUser) => {
-      const imageName = fileList[0]
-
       const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       const N = 16
       const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N)))
         .map((n) => S[n % S.length])
         .join('')
-      // TODO ts-ignoreを取り除く
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      await storage.ref(`/images/${fileName}`).put(imageName.originFileObj)
 
-      storage
-        .ref(`images`)
+      const imageObj = fileList[0]
+      await storage
+        .ref(`images/${fileName}`)
+        // TODO ts-ignoreを取り除く
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .put(imageObj.originFileObj)
+        .then((shapshot) => {
+          console.log('debug.firestorage.put.image.status: ' + shapshot.state)
+        })
+        .catch((err: Error) => {
+          console.log(err)
+        })
+
+      let imgURL = ''
+      await storage
+        .ref('images')
         .child(fileName)
         .getDownloadURL()
-        .then((fireBaseUrl) => {
-          db.collection('Users').doc(loginUser.uid).set(
-            {
-              imgurl: fireBaseUrl,
-            },
-            { merge: true }
-          )
+        .then((firebaseURL: string) => {
+          console.log('debug.firestorage.getDownloadURL: ' + firebaseURL)
+          imgURL = firebaseURL
+        })
+        /*
+        下記は上手くいかない
+        then の引数を async 関数にしても Users.uid.imgurl の保存を await してくれない
+        
+        .then(async(firebaseURL: string) => {
+          await db.collection('Users').doc(loginUser.uid).set({...})
+        })
+        以上の経緯から let imgURL に firebaseURL を代入する方針になりました
+        */
+        .catch((err: Error) => {
+          console.log(err)
+        })
+
+      await db
+        .collection('Users')
+        .doc(loginUser.uid)
+        .set({ imgurl: imgURL }, { merge: true })
+        .then(() => {
+          console.log('debug.firebase.set.imgurl')
+        })
+        .catch((err: Error) => {
+          console.log(err)
         })
     },
     [fileList[0]]
@@ -139,6 +176,10 @@ const UserSetting: VFC = () => {
   const onFileChange = useCallback(
     async ({ fileList: newFileList }) => {
       await setFileList(newFileList)
+      console.log(fileList[0]?.status)
+      if (fileList[0]?.status === 'error') {
+        console.log('done')
+      }
     },
     [fileList[0]]
   )
@@ -161,7 +202,7 @@ const UserSetting: VFC = () => {
     const image = new Image()
     image.src = src
     const imgWindow = window.open(src)
-
+    console.log(src)
     if (imgWindow !== null) {
       imgWindow.document.write(image.outerHTML)
     }
@@ -202,16 +243,22 @@ const UserSetting: VFC = () => {
           <TabPane tab="プロフィール設定" key="1">
             <Col>
               <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
-                <Form.Item label="ユーザ名" name="username" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[{ required: true, message: 'Please input your username!' }]}
+                  style={{ flexDirection: 'column' }}
+                  labelAlign={'left'}
+                >
                   <Input
                     onChange={(e) => {
                       setUserName(e.target.value)
                     }}
                   />
                 </Form.Item>
-                {/* <p>{userInfo?.email}</p> */}
+                <p>{userInfo?.email}</p>
                 <Form.Item
-                  label="メールアドレス"
+                  label="email"
                   name="email"
                   rules={[
                     {
@@ -228,25 +275,6 @@ const UserSetting: VFC = () => {
                       setEmail(e.target.value)
                     }}
                   />
-                </Form.Item>
-                <Form.Item
-                  // noStyle
-                  label="プログラミング歴"
-                  style={{ flexDirection: 'column' }}
-                  labelAlign={'left'}
-                >
-                  <InputNumber
-                    onChange={(e: number) => {
-                      setPeriodYear(e)
-                    }}
-                  />
-                  年
-                  <InputNumber
-                    onChange={(e: number) => {
-                      setPeriodMonth(e)
-                    }}
-                  />
-                  ヶ月
                 </Form.Item>
                 <Form.Item label="自己紹介" name="自己紹介" style={{ flexDirection: 'column' }} labelAlign={'left'}>
                   <Input.TextArea

@@ -13,7 +13,7 @@ import { LoginUserContext } from 'components/providers/LoginUserProvider'
 const alert = message
 const WEBHOOK_KEY = process.env.REACT_APP_WEBHOOK
 
-const AddRoom: VFC<any> = () => {
+const AddRoom: VFC = () => {
   const { loginUser } = useContext(LoginUserContext)
   const [meetTitle, setMeetTitle] = useState<string>('もくもく会')
   const [hostDay, setHostDay] = useState<number[]>([])

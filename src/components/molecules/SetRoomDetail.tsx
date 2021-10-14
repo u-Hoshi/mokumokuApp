@@ -2,9 +2,22 @@ import { VFC } from 'react'
 import { DatePicker, Form, Input, TimePicker, Select } from 'antd'
 import 'antd/dist/antd.css'
 import TextArea from 'antd/lib/input/TextArea'
+import { RangeValue } from 'rc-picker/lib/interface.d'
+import { Moment } from 'moment'
+import { ChangeEventHandler } from 'react-router/node_modules/@types/react'
+import { SelectValue } from 'antd/lib/tree-select'
 const { Option } = Select
 
-const SetRoomDetail: VFC<any> = (props) => {
+type SetroomDetilType = {
+  onChangeTitle: ChangeEventHandler<HTMLInputElement> | undefined
+  onChangeDay: ((value: Moment | null, dateString: string) => void) | undefined
+  disabledDate: ((date: Moment) => boolean) | undefined
+  onChangeTime: ((values: RangeValue<Moment>, formatString: [string, string]) => void) | undefined
+  onChangeType: (value: string) => void
+  onChangeMessage: ChangeEventHandler<HTMLTextAreaElement> | undefined
+}
+
+const SetRoomDetail: VFC<SetroomDetilType> = (props) => {
   const { onChangeTitle, onChangeDay, disabledDate, onChangeTime, onChangeType, onChangeMessage } = props
   return (
     <>
