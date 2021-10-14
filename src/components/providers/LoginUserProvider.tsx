@@ -12,7 +12,7 @@ export const LoginUserContext = createContext<any>({} as LoginUserContextType)
 
 export const LoginUserProvider = (props: { children: ReactNode }) => {
   const { children } = props
-  const [loginUser, setLoginUser] = useState<any>(null)
+  const [loginUser, setLoginUser] = useState<UserType>()
   const history = useHistory()
   // TODO anyを取り除く
   useEffect(() => {

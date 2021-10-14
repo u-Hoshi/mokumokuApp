@@ -3,5 +3,5 @@ export type UserType = {
   email: string
   password: string
   displayname: string
-  imgurl: string
+  imgurl?: string
 }

@@ -6,6 +6,7 @@ import { Form, FormInstance, message } from 'antd'
 import moment, { Moment } from 'moment'
 import { GuestType } from 'types/guest'
 import firebase from 'firebase'
+import { UserType } from 'types/user'
 
 const alert = message
 const WEBHOOK_KEY = process.env.REACT_APP_WEBHOOK
@@ -23,8 +24,8 @@ type Room = {
 
 type Guest = {
   guestId: string
-  guestName: string
-  guestImg: string
+  guestName?: string
+  guestImg?: string
 }
 
 export const useEditRoom = (
@@ -52,15 +53,16 @@ export const useEditRoom = (
   loginUser: string
   meetTitle: string
   isModalVisible: boolean
-  form: FormInstance<any>
+  form: FormInstance<string>
   isJoin: boolean
   isAuthor: boolean
-  guests: GuestType[]
+  guests: { guestId: string }[]
   authorIcon: string | undefined
   authorName: string | undefined
   cardColor: string
 } => {
-  const { loginUser } = useContext<any>(LoginUserContext)
+  const { loginUser } = useContext(LoginUserContext)
+  // 一旦保留
   const [authorName, setAuthorName] = useState<string>()
   const [authorIcon, setAuthorIcon] = useState<string>()
   const [meetTitle, setMeetTitle] = useState<string>(roomMeetTitle)
@@ -71,7 +73,7 @@ export const useEditRoom = (
   const [meetMessage, setMeetMessage] = useState<string>(roomMeetMessage)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [guests, setGuests] = useState<Array<GuestType>>([])
+  const [guests, setGuests] = useState<Array<{ guestId: string }>>([])
   const [form] = Form.useForm()
 
   // 参加判定
@@ -119,7 +121,7 @@ export const useEditRoom = (
   db.collection(`Users`)
     .doc(`${roomAuthorId}`)
     .get()
-    .then((doc: any) => {
+    .then((doc) => {
       if (doc.exists) {
         setAuthorName(doc.data()?.displayname)
         setAuthorIcon(doc.data()?.imgurl)
@@ -135,8 +137,8 @@ export const useEditRoom = (
     db.collection('Group1')
       .doc(roomId)
       .collection('guests')
-      .onSnapshot((snapshot: any) => {
-        const Guests = snapshot.docs.map((doc: any) => {
+      .onSnapshot((snapshot) => {
+        const Guests = snapshot.docs.map((doc) => {
           arrParticipant.push(doc.id)
           setParticipant(arrParticipant)
           return {
