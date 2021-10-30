@@ -1,4 +1,4 @@
-import { useContext, useState, VFC } from 'react'
+import { useContext, useState, VFC, ChangeEventHandler } from 'react'
 import { useHistory } from 'react-router'
 import { auth, db } from '../../firebase/index'
 import { Form, Input, Button, Row, Typography, Col } from 'antd'
@@ -6,41 +6,45 @@ import PrimaryButton from 'components/atoms/PrimaryButton'
 import LoginHeader from 'components/orgnisms/LoginHeader'
 import { LoginUserContext } from 'components/providers/LoginUserProvider'
 import styles from '../styles/Login.module.css'
+import { EventHandler } from 'react-router/node_modules/@types/react'
 
 const { Title } = Typography
 
 const Login: VFC = () => {
+  const history = useHistory()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const history = useHistory()
-  // const { loginUser, setLoginUser } = useContext(LoginUserContext)
-  const handleSubmit = () => {
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }
+  const onSubmit = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         history.push('/')
       })
-      // 後ほどユーザ名を設定
       .catch((err) => {
         console.log('err' + err)
         alert('ログイン失敗です')
       })
   }
-  // TODO 関数名変更する
-  const goSignup = () => {
+  const onSignup = () => {
     history.push('/signup')
   }
 
   return (
     <>
-      {/* ログイン・サインアップ共通のヘッダーをorgnismsから呼び出す */}
       <LoginHeader />
       <Title level={2} style={{ textAlign: 'center' }}>
         ログイン
       </Title>
       <Row justify="center">
         <Col className={styles.loginForm}>
-          <Form onFinish={handleSubmit} style={{ textAlign: 'center' }}>
+          <Form onFinish={onSubmit} style={{ textAlign: 'center' }}>
             <Form.Item
               label="email"
               name="email"
@@ -48,11 +52,7 @@ const Login: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                }}
-              />
+              <Input onChange={onChangeEmail} />
             </Form.Item>
             <Form.Item
               label="password"
@@ -61,15 +61,11 @@ const Login: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input.Password
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
-              />
+              <Input.Password onChange={onChangePassword} />
             </Form.Item>
             <PrimaryButton style={{ width: '100%' }}>ログイン</PrimaryButton>
           </Form>
-          <Button type="link" onClick={goSignup} style={{ display: 'block', margin: '0 auto' }}>
+          <Button type="link" onClick={onSignup} style={{ display: 'block', margin: '0 auto' }}>
             サインアップページに飛ぶ
           </Button>
           <Col style={{ display: 'block', margin: '50px auto 0' }}>

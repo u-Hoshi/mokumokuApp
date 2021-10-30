@@ -4,9 +4,7 @@ import { db } from '../../firebase/index'
 import { useContext, useEffect, useState } from 'react'
 import { Form, FormInstance, message } from 'antd'
 import moment, { Moment } from 'moment'
-import { GuestType } from 'types/guest'
 import firebase from 'firebase'
-import { UserType } from 'types/user'
 
 const alert = message
 const WEBHOOK_KEY = process.env.REACT_APP_WEBHOOK
