@@ -14,13 +14,33 @@ const alert = message
 
 const Signup: VFC = () => {
   const { loginUser, setLoginUser } = useContext<any>(LoginUserContext)
+  const history = useHistory()
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
   const [periodYear, setPeriodYear] = useState<number>()
   const [periodMonth, setPeriodMonth] = useState<number>()
-  const history = useHistory()
+
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }
+
+  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.target.value)
+  }
+
+  const onChangeYear = (e: number) => {
+    setPeriodYear(e)
+  }
+  const onChangeMonth = (e: number) => {
+    setPeriodMonth(e)
+  }
+
   const handleSubmit = useCallback(() => {
     auth
       .createUserWithEmailAndPassword(email, password)
@@ -160,11 +180,7 @@ const Signup: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input
-                onChange={(e) => {
-                  setUserName(e.target.value)
-                }}
-              />
+              <Input onChange={onChangeUserName} />
             </Form.Item>
             <Form.Item
               label="メールアドレス"
@@ -179,11 +195,7 @@ const Signup: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                }}
-              />
+              <Input onChange={onChangeEmail} />
             </Form.Item>
 
             <Form.Item
@@ -193,29 +205,12 @@ const Signup: VFC = () => {
               style={{ flexDirection: 'column' }}
               labelAlign={'left'}
             >
-              <Input.Password
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
-              />
+              <Input.Password onChange={onChangePassword} />
             </Form.Item>
-            <Form.Item
-              // noStyle
-              label="プログラミング歴"
-              style={{ flexDirection: 'column' }}
-              labelAlign={'left'}
-            >
-              <InputNumber
-                onChange={(e: number) => {
-                  setPeriodYear(e)
-                }}
-              />
+            <Form.Item label="プログラミング歴" style={{ flexDirection: 'column' }} labelAlign={'left'}>
+              <InputNumber onChange={onChangeYear} />
               年
-              <InputNumber
-                onChange={(e: number) => {
-                  setPeriodMonth(e)
-                }}
-              />
+              <InputNumber onChange={onChangeMonth} />
               ヶ月
             </Form.Item>
             <Form.Item label="アイコン(jpgのみ)" name="file" style={{ flexDirection: 'column' }} labelAlign={'left'}>

@@ -1,75 +1,82 @@
-import { Button, Col, Table, Tabs, Typography } from 'antd'
+import { Col, Table, Tabs, Typography } from 'antd'
 import HeaderLayout from 'components/themplates/HeaderLayout'
 import { db } from '../../firebase/index'
 import { useEffect, useState, VFC } from 'react'
-import { useHistory } from 'react-router-dom'
+import { ColumnGroupType, ColumnType } from 'antd/lib/table'
 
 const { TabPane } = Tabs
 
 const { Title } = Typography
 
+type joinColumnsProps = {
+  title: string
+  dataIndex: string
+  width: number
+  align: string
+  key: string
+}
+
+const joinColumns: (ColumnGroupType<joinColumnsProps> | ColumnType<joinColumnsProps>)[] = [
+  {
+    title: '順位',
+    dataIndex: 'ranking',
+    width: 80,
+    align: 'center',
+    key: 'ranking',
+  },
+  {
+    title: '名前',
+    dataIndex: 'name',
+    width: 100,
+    align: 'center',
+    key: 'name',
+  },
+  {
+    title: '参加回数',
+    dataIndex: 'joinNum',
+    width: 100,
+    align: 'center',
+    key: 'joinNum',
+  },
+  {
+    title: '自己紹介',
+    dataIndex: 'comment',
+    width: 100,
+    align: 'center',
+    key: 'comment',
+  },
+]
+
+const hostColumns: (ColumnGroupType<joinColumnsProps> | ColumnType<joinColumnsProps>)[] = [
+  {
+    title: '順位',
+    dataIndex: 'ranking',
+    width: 80,
+    align: 'center',
+    key: 'ranking',
+  },
+  {
+    title: '名前',
+    dataIndex: 'name',
+    width: 100,
+    align: 'center',
+    key: 'name',
+  },
+  {
+    title: '開催回数',
+    dataIndex: 'hostNum',
+    width: 100,
+    align: 'center',
+    key: 'hostNum',
+  },
+  {
+    title: '自己紹介',
+    dataIndex: 'comment',
+    align: 'center',
+    key: 'comment',
+  },
+]
 const Ranking: VFC = () => {
-  const history = useHistory()
-  const joinColumns: any = [
-    {
-      title: '順位',
-      dataIndex: 'ranking',
-      width: 80,
-      align: 'center',
-      key: 'ranking',
-    },
-    {
-      title: '名前',
-      dataIndex: 'name',
-      width: 100,
-      align: 'center',
-      key: 'name',
-    },
-    {
-      title: '参加回数',
-      dataIndex: 'joinNum',
-      width: 100,
-      align: 'center',
-      key: 'joinNum',
-    },
-    {
-      title: '自己紹介',
-      dataIndex: 'comment',
-      align: 'center',
-      key: 'comment',
-    },
-  ]
-
-  const hostColumns: any = [
-    {
-      title: '順位',
-      dataIndex: 'ranking',
-      width: 80,
-      align: 'center',
-      key: 'ranking',
-    },
-    {
-      title: '名前',
-      dataIndex: 'name',
-      width: 100,
-      align: 'center',
-      key: 'name',
-    },
-    {
-      title: '開催回数',
-      dataIndex: 'hostNum',
-      width: 100,
-      align: 'center',
-      key: 'hostNum',
-    },
-    {
-      title: '自己紹介',
-      dataIndex: 'comment',
-      align: 'center',
-      key: 'comment',
-    },
-  ]
-
   const [joinNumDatas, setJoinNumDatas] = useState<any>([])
   const [hostNumDatas, setHostNumDatas] = useState<any>([])
 
@@ -81,6 +88,7 @@ const Ranking: VFC = () => {
       .limit(10)
       .onSnapshot((snapshot) => {
         const users = snapshot.docs.map((doc, index) => {
+          // ○位タイの表示
           if (doc.data().JoinNum !== tmp) {
             count = index + 1
             tmp = doc.data().JoinNum
@@ -105,6 +113,7 @@ const Ranking: VFC = () => {
       .limit(10)
       .onSnapshot((snapshot) => {
         const users = snapshot.docs.map((doc, index) => {
+          // ○位タイの表示
           if (doc.data().HostNum !== tmp) {
             count = index + 1
             tmp = doc.data().HostNum

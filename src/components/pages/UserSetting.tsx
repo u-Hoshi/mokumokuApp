@@ -15,13 +15,14 @@ import styles from '../styles/UserSetting.module.css'
 const { TabPane } = Tabs
 
 const UserSetting: VFC = () => {
+  const history = useHistory()
   const { loginUser, setLoginUser } = useContext(LoginUserContext)
   const { id } = useParams<{ id: string }>()
+
   const [userInfo, setUserInfo] = useState<any>()
   const [userName, setUserName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [userMemo, setUserMemo] = useState<string>('')
-  const history = useHistory()
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
 
   const fetchUser = async (id: string) => {
@@ -99,7 +100,6 @@ const UserSetting: VFC = () => {
         } else {
           const data = snapshot.data()
           if (data !== undefined) {
-            console.log('debug.firebase.get.imgurl: ' + data.imgurl)
             setLoginUser({
               imgurl: data.imgurl,
             })
@@ -152,7 +152,7 @@ const UserSetting: VFC = () => {
         .then(async(firebaseURL: string) => {
           await db.collection('Users').doc(loginUser.uid).set({...})
         })
-        以上の経緯から let imgURL に firebaseURL を代入する方針になりました
+        以上の経緯から let imgURL に firebaseURL を代入する方針に変更
         */
         .catch((err: Error) => {
           console.log(err)
@@ -235,6 +235,21 @@ const UserSetting: VFC = () => {
       })
   }
 
+  const onSubmitForm = (values: string) => {
+    handleSubmit(email, userName, userMemo)
+  }
+
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.target.value)
+  }
+
+  const onChangeUserMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setUserMemo(e.target.value)
+  }
+
   return (
     <>
       <HeaderLayout />
@@ -242,7 +257,7 @@ const UserSetting: VFC = () => {
         <Tabs defaultActiveKey="1" onChange={callback} className={styles.userSettingForm}>
           <TabPane tab="プロフィール設定" key="1">
             <Col>
-              <Form onFinish={() => handleSubmit(email, userName, userMemo)}>
+              <Form onFinish={onSubmitForm}>
                 <Form.Item
                   label="Username"
                   name="username"
@@ -250,11 +265,7 @@ const UserSetting: VFC = () => {
                   style={{ flexDirection: 'column' }}
                   labelAlign={'left'}
                 >
-                  <Input
-                    onChange={(e) => {
-                      setUserName(e.target.value)
-                    }}
-                  />
+                  <Input onChange={onChangeUserName} />
                 </Form.Item>
                 <p>{userInfo?.email}</p>
                 <Form.Item
@@ -270,18 +281,10 @@ const UserSetting: VFC = () => {
                   style={{ flexDirection: 'column' }}
                   labelAlign={'left'}
                 >
-                  <Input
-                    onChange={(e) => {
-                      setEmail(e.target.value)
-                    }}
-                  />
+                  <Input onChange={onChangeEmail} />
                 </Form.Item>
                 <Form.Item label="自己紹介" name="自己紹介" style={{ flexDirection: 'column' }} labelAlign={'left'}>
-                  <Input.TextArea
-                    onChange={(e) => {
-                      setUserMemo(e.target.value)
-                    }}
-                  />
+                  <Input.TextArea onChange={onChangeUserMemo} />
                 </Form.Item>
                 <PrimaryButton>更新</PrimaryButton>
               </Form>
@@ -304,7 +307,7 @@ const UserSetting: VFC = () => {
               </Form.Item>
               <PrimaryButton>更新</PrimaryButton>
             </Form>
-            <SecondaryButton onClick={() => onClickDelete()} style={{ marginTop: '10px' }}>
+            <SecondaryButton onClick={onClickDelete} style={{ marginTop: '10px' }}>
               現在の画像を削除
             </SecondaryButton>
           </TabPane>

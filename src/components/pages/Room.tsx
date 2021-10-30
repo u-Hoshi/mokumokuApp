@@ -1,10 +1,8 @@
 import { Col, Row } from 'antd'
 import HeaderLayout from 'components/themplates/HeaderLayout'
 import RoomTable from 'components/themplates/RoomTable'
-import { VFC, useContext } from 'react'
-import { LoginUserContext } from 'components/providers/LoginUserProvider'
+import { VFC } from 'react'
 import AddRoom from 'components/orgnisms/AddRoom'
-import { UserType } from 'types/user'
 import styles from '../styles/Room.module.css'
 import AddRoomFormSp from 'components/themplates/AddRoomFormSp'
 
